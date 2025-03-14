@@ -36,7 +36,7 @@
 //
 //
 
-
+#include <Arduino.h>
 #include <Wire.h>
 
 // Motor control pins
@@ -49,6 +49,8 @@ int IN3 = 6;
 int IN4 = 7;
 int ENBf = 8; // PWM pin for motor speed control
 int ENBr = 9; // PWM pin for motor speed control
+
+void receiveEvent(int howMany);                                 
 
 void setup() {
   // Initialize I2C communication as a slave
