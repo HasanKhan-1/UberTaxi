@@ -1,5 +1,18 @@
 import cv2 as cv
 import numpy as np
+import smbus2
+import time
+
+I2C_BUS = 1
+ELEGOO_ADDRESS = 0x08  # Change to match Elegoo's I2C address
+bus = smbus2.SMBus(I2C_BUS)
+
+def send_motor_command(command):
+    try:
+        bus.write_byte(ELEGOO_ADDRESS, command)
+        print(f"Sent command: {command}")
+    except Exception as e:
+        print(f"I2C error: {e}")
 
 def detect_red_line():
     cap = cv.VideoCapture(0)
@@ -76,16 +89,21 @@ def detect_red_line():
                 turn_intensity = int(abs(output))
                 if output < -20:
                     action = f"TURN LEFT (Intensity: {turn_intensity})"
+                    send_motor_command(2)  # Command to turn left
                 elif output > 20:
                     action = f"TURN RIGHT (Intensity: {turn_intensity})"
+                    send_motor_command(3)  # Command to turn right
                 else:
                     action = f"GO STRAIGHT (Confidence: {turn_intensity})"
+                    send_motor_command(1)  # Command to go straight
                 
                 debug_text = f"Line detected | {action} | Centroid X: {cx} | Error: {error:.1f}"
             else:
                 debug_text = "Centroid calculation error"
+                send_motor_command(0)  # Command to stop
         else:
             debug_text = "No line detected - STOPPING"
+            send_motor_command(0)  # Command to stop
 
         # Display debug info
         print(debug_text)
@@ -106,4 +124,5 @@ def detect_red_line():
     cap.release()
     cv.destroyAllWindows()
 
-detect_red_line()
+if __name__ == "__main__":
+    detect_red_line()
