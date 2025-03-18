@@ -8,12 +8,8 @@ IN1 = DigitalOutputDevice(17)
 IN2 = DigitalOutputDevice(18)
 IN3 = DigitalOutputDevice(22)
 IN4 = DigitalOutputDevice(23)
-
-ENAf = PWMOutputDevice(24)  # Speed control (PWM)
-ENBf = PWMOutputDevice(25)  # Speed control (PWM)
-
-ENAr = PWMOutputDevice(5)  # Speed control (PWM)
-ENBr = PWMOutputDevice(6)  # Speed control (PWM)
+ENA = PWMOutputDevice(24)  # Speed control (PWM)
+ENB = PWMOutputDevice(25)  # Speed control (PWM)
 
 # Camera Setup
 cap = cv.VideoCapture(0)
@@ -24,45 +20,32 @@ def stop_motors():
     IN2.off()
     IN3.off()
     IN4.off()
-    ENAf.value = 0
-    ENAr.value = 0
-
-    ENBf.value = 0
-    ENBr.value = 0
+    ENA.value = 0
+    ENB.value = 0
 
 def move_forward(speed=0.5):
     IN1.on()
     IN2.off()
-    IN3.off()
-    IN4.on()
-    ENAf.value = speed
-    ENAr.value = speed
-    ENBf.value = speed
-    ENBr.value = speed
+    IN3.on()
+    IN4.off()
+    ENA.value = speed
+    ENB.value = speed
 
 def turn_left(speed=0.5):
-    slow = 0.25
-    IN1.on()
+    IN1.off()
     IN2.off()
-    IN3.off()
-    IN4.on()
-    ENAf.value = speed
-    ENAr.value = speed
-    ENBf.value = slow
-    ENBr.value = slow
-
+    IN3.on()
+    IN4.off()
+    ENA.value = speed
+    ENB.value = speed
 
 def turn_right(speed=0.5):
-    slow = 0.25
     IN1.on()
     IN2.off()
     IN3.off()
-    IN4.on()
-    ENAf.value = slow
-    ENAr.value = slow
-    ENBf.value = speed
-    ENBr.value = speed
-
+    IN4.off()
+    ENA.value = speed
+    ENB.value = speed
 
 def process_frame(frame):
     # Convert to HSV for better color detection
@@ -81,12 +64,11 @@ def process_frame(frame):
             frame_center = frame.shape[1] // 2
             if cx < frame_center - 50:
                 turn_left(0.6)
-                # move_forward(0.5)
             elif cx > frame_center + 50:
-                # move_forward(0.5)
                 turn_right(0.6)
             else:
                 move_forward(0.5)
+                print("moving")
         else:
             stop_motors()
     else:
