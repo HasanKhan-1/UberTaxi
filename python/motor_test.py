@@ -1,3 +1,4 @@
+#Just a file for testing the basic movement of either motors on the robot
 from gpiozero import PWMOutputDevice, DigitalOutputDevice
 from time import sleep
 
