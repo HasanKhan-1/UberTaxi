@@ -5,7 +5,7 @@ import numpy as np
 
 # Motor Pins
 IN1 = DigitalOutputDevice(17)
-IN2 = DigitalOutputDevice(18)
+IN2 = DigitalOutputDevice(27)
 IN3 = DigitalOutputDevice(22)
 IN4 = DigitalOutputDevice(23)
 ENA = PWMOutputDevice(24)  # Speed control (PWM)
