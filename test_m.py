@@ -29,6 +29,8 @@ GPIO.setup(in4, GPIO.OUT)
 GPIO.setup(en1, GPIO.OUT)
 GPIO.setup(en2, GPIO.OUT)
 
+GPIO.setup(en1b, GPIO.OUT)
+GPIO.setup(en2b, GPIO.OUT)
 # Initialize PWM for speed control
 p1 = GPIO.PWM(en1, 100)  # 100 Hz frequency
 p1b = GPIO.PWM(en1b, 100)  # 100 Hz frequency
