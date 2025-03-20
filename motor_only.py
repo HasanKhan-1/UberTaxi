@@ -1,9 +1,5 @@
-import cv2
 import numpy as np
 from gpiozero import PWMOutputDevice, DigitalOutputDevice
-cap = cv2.VideoCapture(0)
-cap.set(3, 160)
-cap.set(4, 120)
 # cx =0
 # cy = 0
 in1 = 0
