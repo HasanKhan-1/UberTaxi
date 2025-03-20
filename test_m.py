@@ -39,8 +39,8 @@ p2 = GPIO.PWM(en2, 100)  # 100 Hz frequency
 p2b = GPIO.PWM(en2b, 100)  # 100 Hz frequency
 
 # Start PWM with 0% duty cycle (motor stopped)
-p1.start(50)
-p2.start(50)
+p1.start(0)
+p2.start(0)
 
 GPIO.output(in1, GPIO.LOW)
 GPIO.output(in2, GPIO.LOW)
