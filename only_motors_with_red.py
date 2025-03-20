@@ -53,6 +53,7 @@ def move_forward(speed):
     pwm1.ChangeDutyCycle(speed)
     pwm2.ChangeDutyCycle(speed)
 
+
 if __name__ == "__main__":
     try:
         stop_motors()
@@ -87,7 +88,7 @@ if __name__ == "__main__":
 
                     if cx <120 and cx > 40 :
                         print("Straight, on track")
-                        move_forward(100)  # Move forward with 100% speed
+                        move_forward(20)  # Move forward with 100% speed
                         time.sleep(5)  # Move forward for 5 seconds
                         stop_motors()
                         time.sleep(2)  # Stop for 2 seconds
