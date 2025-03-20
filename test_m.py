@@ -87,25 +87,18 @@ while True:
                 print("Straight, on track")
                 
                 # forward
-                GPIO.output(in1, GPIO.LOW)
-                GPIO.output(in2, GPIO.HIGH)
-
-                GPIO.output(in3, GPIO.LOW)
-                GPIO.output(in4, GPIO.HIGH)
-
-                # left_forward.on() 
-                # left_backward.off()
-
-                # right_forward.off()
-                # right_backward.on()
+                GPIO.output(in1, GPIO.HIGH)
+                GPIO.output(in2, GPIO.LOW)
+                GPIO.output(in3, GPIO.HIGH)
+                GPIO.output(in4, GPIO.LOW)
 
                 p1.ChangeDutyCycle(30) # left forward speed
                 # p1b.value = 0.25 # right
                 p2.ChangeDutyCycle(30) # left             
                 # p2b.value = 0.20 # right
 
-                p1b.ChangeDutyCycle(30) # left             
-                p2b.ChangeDutyCycle(30) # left             
+                # p1b.ChangeDutyCycle(30) # left             
+                # p2b.ChangeDutyCycle(30) # left             
 
             if cx <=40 :
                 print("Turn Right")
