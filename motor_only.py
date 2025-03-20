@@ -1,54 +1,61 @@
-import numpy as np
-from gpiozero import PWMOutputDevice, DigitalOutputDevice
-# cx =0
-# cy = 0
+import RPI.GPIO as GPIO
+import time
+
 in1 = 0
-# in2 used to be gpio 18
 in2 = 2
 in3 = 3
-#in4 used to be gpio 23
 in4 = 4
 
 en1 = 5 # for forwards for speed
 en2 = 25 # for forwards for speed
 en1b = 6 # backwards for speed
 en2b = 27 # backwards for speed
+# Set up GPIO mode
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 
-p1 = PWMOutputDevice(en1, frequency=100)
-p2 = PWMOutputDevice(en1b, frequency=100)
-p1.value = 1
-p2.value = 1
+# Set up GPIO pins
+GPIO.setup(in1, GPIO.OUT)
+GPIO.setup(in2, GPIO.OUT)
+GPIO.setup(in3, GPIO.OUT)
+GPIO.setup(in4, GPIO.OUT)
+GPIO.setup(en1, GPIO.OUT)
+GPIO.setup(en2, GPIO.OUT)
 
-p3 = PWMOutputDevice(en2, frequency=100)
-p4 = PWMOutputDevice(en2b, frequency=100)
-p3.value = 1
-p4.value = 1
+# Initialize PWM for speed control
+pwm1 = GPIO.PWM(en1, 100)  # 100 Hz frequency
+pwm2 = GPIO.PWM(en2, 100)  # 100 Hz frequency
 
-# left_forward = DigitalOutputDevice(in1)
-# left_backward = DigitalOutputDevice(in2)
+# Start PWM with 0% duty cycle (motor stopped)
+pwm1.start(0)
+pwm2.start(0)
 
-left_forward = DigitalOutputDevice(in1)
-left_backward = DigitalOutputDevice(in2)
-right_forward = DigitalOutputDevice(in3)
-right_backward= DigitalOutputDevice(in4)
+def stop_motors():
+    GPIO.output(in1, GPIO.LOW)
+    GPIO.output(in2, GPIO.LOW)
+    GPIO.output(in3, GPIO.LOW)
+    GPIO.output(in4, GPIO.LOW)
+    pwm1.ChangeDutyCycle(0)
+    pwm2.ChangeDutyCycle(0)
 
-
-left_forward.off()
-left_backward.off()
-right_backward.off()
-right_forward.off()
-
+def move_forward(speed):
+    GPIO.output(in1, GPIO.HIGH)
+    GPIO.output(in2, GPIO.LOW)
+    GPIO.output(in3, GPIO.HIGH)
+    GPIO.output(in4, GPIO.LOW)
+    pwm1.ChangeDutyCycle(speed)
+    pwm2.ChangeDutyCycle(speed)
 
 if __name__ == "__main__":
-
-    left_forward.off()
-    left_backward.off()
-    right_backward.off()
-    right_forward.off()
-    
-    while True:
-        left_forward.on()
-        left_backward.off()
-        right_backward.on()
-        right_forward.off()
-
+    try:
+        stop_motors()
+        while True:
+            move_forward(100)  # Move forward with 100% speed
+            time.sleep(5)  # Move forward for 5 seconds
+            stop_motors()
+            time.sleep(2)  # Stop for 2 seconds
+    except KeyboardInterrupt:
+        pass
+    finally:
+        stop_motors()
+        GPIO.cleanup()
