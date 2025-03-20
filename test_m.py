@@ -103,7 +103,10 @@ while True:
                 # p1b.value = 0.25 # right
                 p2.ChangeDutyCycle(30) # left             
                 # p2b.value = 0.20 # right
-                              
+
+                p1b.ChangeDutyCycle(30) # left             
+                p2b.ChangeDutyCycle(30) # left             
+
             if cx <=40 :
                 print("Turn Right")
                 # left_forward.off()
