@@ -101,6 +101,7 @@ if __name__ == "__main__":
 
             cv2.imshow("Mask",mask)
             cv2.imshow("Frame",frame)
+            cv2.waitKey(1)
 
     except KeyboardInterrupt:
         pass
