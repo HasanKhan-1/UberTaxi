@@ -59,17 +59,19 @@ from gpiozero import PWMOutputDevice, DigitalOutputDevice, Motor
 cap = cv2.VideoCapture(0)
 cap.set(3, 160)
 cap.set(4, 120)
-in1 = 17
+cx =0
+cy = 0
+in1 = 0
 # in2 used to be gpio 18
-in2 = 26
-in3 = 22
+in2 = 2
+in3 = 3
 #in4 used to be gpio 23
-in4 = 16
+in4 = 4
 
-en1 = 24 # for forwards for speed
+en1 = 5 # for forwards for speed
 en2 = 25 # for forwards for speed
-en1b = 19 # backwards for speed
-en2b = 5 # backwards for speed
+en1b = 6 # backwards for speed
+en2b = 27 # backwards for speed
 
 p1 = PWMOutputDevice(en1, frequency=100)
 p2 = PWMOutputDevice(en1b, frequency=100)
