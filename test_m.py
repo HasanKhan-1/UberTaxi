@@ -126,7 +126,7 @@ while True:
 
     cv2.imshow("Mask",mask)
     cv2.imshow("Frame",frame)
-
+    cv2.waitKey(1)
 cap.release()
 cv2.destroyAllWindows()
 
