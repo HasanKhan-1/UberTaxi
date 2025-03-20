@@ -3,8 +3,8 @@ import time
 
 in1 = 17
 in2 = 27
-in3 = 22
-in4 = 23
+in3 = 4
+in4 = 3
 
 en1 = 24 # for forwards for speed
 en2 = 38 # for forwards for speed
