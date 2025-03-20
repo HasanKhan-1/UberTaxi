@@ -53,6 +53,22 @@ def move_forward(speed):
     pwm1.ChangeDutyCycle(speed)
     pwm2.ChangeDutyCycle(speed)
 
+def move_left(speedright, speedleft):
+    GPIO.output(in1, GPIO.HIGH)
+    GPIO.output(in2, GPIO.LOW)
+    GPIO.output(in3, GPIO.HIGH)
+    GPIO.output(in4, GPIO.LOW)
+    pwm1.ChangeDutyCycle(speedright)
+    pwm2.ChangeDutyCycle(speedleft)
+
+def move_right(speedright, speedleft):
+    GPIO.output(in1, GPIO.HIGH)
+    GPIO.output(in2, GPIO.LOW)
+    GPIO.output(in3, GPIO.HIGH)
+    GPIO.output(in4, GPIO.LOW)
+    pwm1.ChangeDutyCycle(speedright)
+    pwm2.ChangeDutyCycle(speedleft)
+
 
 if __name__ == "__main__":
     try:
@@ -74,18 +90,8 @@ if __name__ == "__main__":
 
                     if cx >= 160 :
                         print("Turn Left")
-
-                        # left_forward.off()
-                        # left_backward.on() #2
-                        # right_forward.off()
-                        # right_backward.on() #4
-
-                        # p4.value = 0.4 
-                        # p2.value = 0.2 
-
-                        # p1.value = 0.2
-                        # p3.value = 0.2 
-
+                        move_left(20, 10)
+                        
                     if cx <120 and cx > 40 :
                         print("Straight, on track")
                         move_forward(20)  # Move forward with 100% speed
