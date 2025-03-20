@@ -40,6 +40,12 @@ right_forward.off()
 
 
 if __name__ == "__main__":
+
+    left_forward.off()
+    left_backward.off()
+    right_backward.off()
+    right_forward.off()
+    
     while True:
         left_forward.on()
         left_backward.off()
