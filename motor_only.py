@@ -1,15 +1,15 @@
 import RPi.GPIO as GPIO
 import time
 
-in1 = 0
-in2 = 2
-in3 = 3
-in4 = 4
+in1 = 17
+in2 = 27
+in3 = 22
+in4 = 23
 
-en1 = 5 # for forwards for speed
-en2 = 25 # for forwards for speed
-en1b = 6 # backwards for speed
-en2b = 27 # backwards for speed
+en1 = 24 # for forwards for speed
+en2 = 38 # for forwards for speed
+en1b = 25 # backwards for speed
+en2b = 36 # backwards for speed
 # Set up GPIO mode
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
