@@ -42,8 +42,9 @@ right_forward.off()
 
 while True:
     ret, frame = cap.read()
-    low_b = np.uint8([250, 0, 0])
-    high_b = np.uint8([255, 77, 77])
+    low_b = np.uint8([0, 0, 153 ])
+    high_b = np.uint8([102, 102, 255])
+
     mask = cv2.inRange(frame, low_b, high_b )
     contours, hierarchy = cv2.findContours(mask, 1, cv2.CHAIN_APPROX_NONE)
     if len(contours) > 0 :
@@ -54,7 +55,7 @@ while True:
             cy = int(M['m01']/M['m00'])
             print("CX : "+str(cx)+"  CY : "+str(cy))
 
-            if cx >= 120 :
+            if cx >= 160 :
                 print("Turn Left")
                 
                 left_forward.off()
@@ -62,11 +63,11 @@ while True:
                 right_forward.off()
                 right_backward.on() #4
 
-                p4.value = 0.4 # right backwards speed 
-                p2.value = 0.2 # left backward speed
+                p4.value = 0.4 
+                p2.value = 0.2 
 
-                p1.value = 0.2 # right forward speed
-                p3.value = 0.2 # left forward speed
+                p1.value = 0.2
+                p3.value = 0.2 
 
             if cx <120 and cx > 40 :
                 print("Straight, on track")
@@ -77,10 +78,10 @@ while True:
                 right_forward.off()
                 right_backward.on()
 
-                p1.value = 0.4
-                p4.value = 0.4
-                p2.value = 0.4               
-                p3.value = 0.4
+                p1.value = 0.25 # left forward speed
+                p4.value = 0.20 # right
+                p2.value = 0.25 # left             
+                p3.value = 0.20 # right
                               
 
             if cx <=40 :
