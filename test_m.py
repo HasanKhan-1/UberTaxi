@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
-from gpiozero import PWMOutputDevice, DigitalOutputDevice
+import RPi.GPIO as GPIO
+
 cap = cv2.VideoCapture(0)
 cap.set(3, 160)
 cap.set(4, 120)
@@ -11,41 +12,53 @@ in3 = 22
 in4 = 27
 
 en1 = 16 # for forwards for speed
-en2 = 17 # for forwards for speed
 en1b = 26 # backwards for speed
+
+en2 = 17 # for forwards for speed
 en2b = 23 # backwards for speed
 
-p1 = PWMOutputDevice(en1, frequency=100)
-p2 = PWMOutputDevice(en1b, frequency=100)
-p1.value = 1
-p2.value = 1
+# Set up GPIO mode
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 
-p3 = PWMOutputDevice(en2, frequency=100)
-p4 = PWMOutputDevice(en2b, frequency=100)
-p3.value = 1
-p4.value = 1
+# Set up GPIO pins
+GPIO.setup(in1, GPIO.OUT)
+GPIO.setup(in2, GPIO.OUT)
+GPIO.setup(in3, GPIO.OUT)
+GPIO.setup(in4, GPIO.OUT)
+GPIO.setup(en1, GPIO.OUT)
+GPIO.setup(en2, GPIO.OUT)
 
-# left_forward = DigitalOutputDevice(in1)
-# left_backward = DigitalOutputDevice(in2)
+# Initialize PWM for speed control
+p1 = GPIO.PWM(en1, 100)  # 100 Hz frequency
+p1b = GPIO.PWM(en1b, 100)  # 100 Hz frequency
 
-left_forward = DigitalOutputDevice(in1)
-left_backward = DigitalOutputDevice(in2)
-right_forward = DigitalOutputDevice(in3)
-right_backward= DigitalOutputDevice(in4)
+p2 = GPIO.PWM(en2, 100)  # 100 Hz frequency
+p2b = GPIO.PWM(en2b, 100)  # 100 Hz frequency
 
+# Start PWM with 0% duty cycle (motor stopped)
+p1.start(50)
+p2.start(50)
 
-left_forward.off()
-left_backward.off()
-right_backward.off()
-right_forward.off()
+GPIO.output(in1, GPIO.LOW)
+GPIO.output(in2, GPIO.LOW)
+
+GPIO.output(in3, GPIO.LOW)
+GPIO.output(in4, GPIO.LOW)
+
+GPIO.output(en1, GPIO.LOW)
+GPIO.output(en1b, GPIO.LOW)
+
+GPIO.output(en2, GPIO.LOW)
+GPIO.output(en2b, GPIO.LOW)
 
 while True:
     ret, frame = cap.read()
-    low_b = np.uint8([0, 0, 153 ])
-    high_b = np.uint8([102, 102, 255])
-
+    low_b = np.uint8([0, 0, 153 ]) # red low threshold
+    high_b = np.uint8([102, 102, 255]) # red high threshold
     mask = cv2.inRange(frame, low_b, high_b )
     contours, hierarchy = cv2.findContours(mask, 1, cv2.CHAIN_APPROX_NONE)
+    
     if len(contours) > 0 :
         c = max(contours, key=cv2.contourArea)
         M = cv2.moments(c)
@@ -56,55 +69,62 @@ while True:
 
             if cx >= 160 :
                 print("Turn Left")
-                
-                left_forward.off()
-                left_backward.on() #2
-                right_forward.off()
-                right_backward.on() #4
 
-                p4.value = 0.4 
-                p2.value = 0.2 
+                # left_forward.off()
+                # left_backward.on() #2
+                # right_forward.off()
+                # right_backward.on() #4
 
-                p1.value = 0.2
-                p3.value = 0.2 
+                # p4.value = 0.4 
+                # p2.value = 0.2 
+
+                # p1.value = 0.2
+                # p3.value = 0.2 
 
             if cx <120 and cx > 40 :
                 print("Straight, on track")
                 
-                left_forward.on() 
-                left_backward.off()
+                # forward
+                GPIO.output(in1, GPIO.HIGH)
+                GPIO.output(in2, GPIO.LOW)
 
-                right_forward.off()
-                right_backward.on()
+                GPIO.output(in3, GPIO.HIGH)
+                GPIO.output(in4, GPIO.LOW)
+
+                # left_forward.on() 
+                # left_backward.off()
+
+                # right_forward.off()
+                # right_backward.on()
 
                 p1.value = 0.25 # left forward speed
-                p4.value = 0.20 # right
-                p2.value = 0.25 # left             
-                p3.value = 0.20 # right
+                # p1b.value = 0.25 # right
+                p2.value = 0.20 # left             
+                # p2b.value = 0.20 # right
                               
-
             if cx <=40 :
                 print("Turn Right")
-                left_forward.off()
-                left_backward.on() #2
-                right_forward.off()
-                right_backward.on() #4
+                # left_forward.off()
+                # left_backward.on() #2
+                # right_forward.off()
+                # right_backward.on() #4
 
-                p4.value = 0.2 # right backwards speed 
-                p2.value = 0.4 # left backward speed
+                # p4.value = 0.2 # right backwards speed 
+                # p2.value = 0.4 # left backward speed
 
-                p1.value = 0.4 # right forward speed
-                p3.value = 0.4 # left forward speed
+                # p1.value = 0.4 # right forward speed
+                # p3.value = 0.4 # left forward speed
 
         cv2.circle(frame, (cx,cy), 5, (255,255,255), -1)
         cv2.drawContours(frame, c, -1, (0,255,0), 1)
     
     else :
         print("I don't see the line")
-        left_forward.off()
-        left_backward.off()
-        right_backward.off()
-        right_forward.off()
+        GPIO.output(in1, GPIO.LOW)
+        GPIO.output(in2, GPIO.LOW)
+
+        GPIO.output(in3, GPIO.LOW)
+        GPIO.output(in4, GPIO.LOW)
 
     cv2.imshow("Mask",mask)
     cv2.imshow("Frame",frame)
