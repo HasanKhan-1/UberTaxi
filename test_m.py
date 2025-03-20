@@ -99,9 +99,9 @@ while True:
                 # right_forward.off()
                 # right_backward.on()
 
-                p1.value = 0.25 # left forward speed
+                p1.ChangeDutyCycle = 0.25 # left forward speed
                 # p1b.value = 0.25 # right
-                p2.value = 0.20 # left             
+                p2.ChangeDutyCycle = 0.20 # left             
                 # p2b.value = 0.20 # right
                               
             if cx <=40 :
