@@ -1,12 +1,5 @@
 import RPi.GPIO as GPIO
 import time
-import cv2
-import numpy as np
-
-cap = cv2.VideoCapture(0)
-cap.set(3, 160)
-cap.set(4, 120)
-
 
 in1 = 6
 in2 = 5
@@ -57,51 +50,10 @@ if __name__ == "__main__":
     try:
         stop_motors()
         while True:
-            ret, frame = cap.read()
-            low_b = np.uint8([0, 0, 153 ]) # red low threshold
-            high_b = np.uint8([102, 102, 255]) # red high threshold
-            mask = cv2.inRange(frame, low_b, high_b )
-            contours, hierarchy = cv2.findContours(mask, 1, cv2.CHAIN_APPROX_NONE)
-            
-            if len(contours) > 0 :
-                c = max(contours, key=cv2.contourArea)
-                M = cv2.moments(c)
-                if M["m00"] !=0 :
-                    cx = int(M['m10']/M['m00'])
-                    cy = int(M['m01']/M['m00'])
-                    print("CX : "+str(cx)+"  CY : "+str(cy))
-
-                    if cx >= 160 :
-                        print("Turn Left")
-
-                        # left_forward.off()
-                        # left_backward.on() #2
-                        # right_forward.off()
-                        # right_backward.on() #4
-
-                        # p4.value = 0.4 
-                        # p2.value = 0.2 
-
-                        # p1.value = 0.2
-                        # p3.value = 0.2 
-
-                    if cx <120 and cx > 40 :
-                        print("Straight, on track")
-                        move_forward(100)  # Move forward with 100% speed
-                        time.sleep(5)  # Move forward for 5 seconds
-                        stop_motors()
-                        time.sleep(2)  # Stop for 2 seconds
-            else :
-                print("I don't see the line")
-                GPIO.output(in1, GPIO.LOW)
-                GPIO.output(in2, GPIO.LOW)
-
-                GPIO.output(in3, GPIO.LOW)
-                GPIO.output(in4, GPIO.LOW)
-
-            cv2.imshow("Mask",mask)
-            cv2.imshow("Frame",frame)
-
+            move_forward(100)  # Move forward with 100% speed
+            time.sleep(5)  # Move forward for 5 seconds
+            stop_motors()
+            time.sleep(2)  # Stop for 2 seconds
     except KeyboardInterrupt:
         pass
     finally:
