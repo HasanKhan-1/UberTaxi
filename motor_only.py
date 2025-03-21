@@ -50,10 +50,10 @@ if __name__ == "__main__":
     try:
         stop_motors()
         while True:
-            move_forward(10)  # Move forward with 100% speed
-            time.sleep(5)  # Move forward for 5 seconds
-            stop_motors()
-            time.sleep(2)  # Stop for 2 seconds
+            move_forward(100)  # Move forward with 100% speed
+            # time.sleep(5)  # Move forward for 5 seconds
+            # stop_motors()
+            # time.sleep(2)  # Stop for 2 seconds
     except KeyboardInterrupt:
         pass
     finally:
