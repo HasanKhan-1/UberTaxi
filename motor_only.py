@@ -46,14 +46,36 @@ def move_forward(speed):
     pwm1.ChangeDutyCycle(speed)
     pwm2.ChangeDutyCycle(speed)
 
+def move_spin(speed):
+    GPIO.output(in1, GPIO.LOW)
+    GPIO.output(in2, GPIO.HIGH)
+    GPIO.output(in3, GPIO.HIGH)
+    GPIO.output(in4, GPIO.LOW)
+    pwm1.ChangeDutyCycle(speed)
+    pwm2.ChangeDutyCycle(speed)
+
+def move_backwards(speed):
+    GPIO.output(in1, GPIO.LOW)
+    GPIO.output(in2, GPIO.HIGH)
+    GPIO.output(in3, GPIO.LOW)
+    GPIO.output(in4, GPIO.HIGH)
+    pwm1.ChangeDutyCycle(speed)
+    pwm2.ChangeDutyCycle(speed)
+
 if __name__ == "__main__":
     try:
         stop_motors()
-        while True:
-            move_forward(100)  # Move forward with 100% speed
-            # time.sleep(5)  # Move forward for 5 seconds
-            # stop_motors()
-            # time.sleep(2)  # Stop for 2 seconds
+        time.sleep(5)
+        move_forward(50)  # Move forward with 100% speed
+        time.sleep(2)  # Move forward for 5 seconds
+        stop_motors()
+        time.sleep(2)  # Stop for 2 seconds
+        move_spin(50)
+        time.sleep(2)
+        stop_motors()
+        time.sleep(2)
+        move_forward(50)
+        time.sleep(2)
     except KeyboardInterrupt:
         pass
     finally:
