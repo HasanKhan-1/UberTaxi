@@ -101,13 +101,13 @@ if __name__ == "__main__":
 
                     if cx >= 160:
                         print("Turn Left")
-                        move_spin(speed)  # Adjust speed as needed
-                        time.sleep(0.5)
-                        stop_motors()
+                        # move_spin(speed)  # Adjust speed as needed
+                        # time.sleep(0.5)
+                        # stop_motors()
                     
                     elif 40 < cx < 120:
                         print("Straight, on track")
-                        move_forward(speed)  # Adjust speed to 80%
+                        move_forward(8)  
                         time.sleep(2)
                         stop_motors()
                         time.sleep(1)
