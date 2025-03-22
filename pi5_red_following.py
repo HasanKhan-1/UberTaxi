@@ -3,6 +3,7 @@ from time import sleep
 import cv2
 import numpy as np
 import time
+from pid_controller import PID  # Import the PID controller
 
 # Motor Pins
 IN1 = DigitalOutputDevice(6)
@@ -21,30 +22,33 @@ ENB.value = 0.5
 ENAb.value = 0.5  # 50% speed
 ENBb.value = 0.5
 
+# Initialize PID controller
+pid = PID(Kp=0.1, Ki=0.01, Kd=0.05)
+setpoint = 80  # Desired position (center of the frame)
 
-def move_forward():
-    """Move both motors forward."""
+def move_forward(speed):
+    """Move both motors forward with a given speed."""
     print("Moving forward")
     IN1.on()
     IN2.off()
     IN3.on()
     IN4.off()
-    ENA.value = 0.5
-    ENB.value = 0.5
-    ENAb.value = 0.5
-    ENBb.value = 0.5
+    ENA.value = speed
+    ENB.value = speed
+    ENAb.value = speed
+    ENBb.value = speed
 
-def move_backward():
-    """Move both motors backward."""
+def move_backward(speed):
+    """Move both motors backward with a given speed."""
     print("Moving backward")
     IN1.off()
     IN2.on()
     IN3.off()
     IN4.on()
-    ENA.value = 0.5
-    ENB.value = 0.5
-    ENAb.value = 0.5
-    ENBb.value = 0.5
+    ENA.value = speed
+    ENB.value = speed
+    ENAb.value = speed
+    ENBb.value = speed
 
 def stop_motors():
     """Stop both motors."""
@@ -58,15 +62,15 @@ def stop_motors():
     ENAb.off()
     ENBb.off()
 
-def move_spin():
+def move_spin(speed):
     IN1.off()
     IN2.on()
     IN3.off()
     IN4.on()
-    ENA.value = 0.5
-    ENB.value = 0.5
-    ENAb.value = 0.5
-    ENBb.value = 0.5
+    ENA.value = speed
+    ENB.value = speed
+    ENAb.value = speed
+    ENBb.value = speed
 
 if __name__ == "__main__":
     try:
@@ -91,15 +95,20 @@ if __name__ == "__main__":
                     cy = int(M['m01'] / M['m00'])
                     print(f"CX: {cx}, CY: {cy}")
 
+                    # Calculate PID output
+                    pid_output = pid.compute(setpoint, cx)
+                    speed = 0.5 + pid_output  # Adjust base speed with PID output
+                    speed = max(0, min(1, speed))  # Ensure speed is within [0, 1]
+
                     if cx >= 160:
                         print("Turn Left")
-                        move_spin()  # Adjust speed as needed
+                        move_spin(speed)  # Adjust speed as needed
                         time.sleep(0.5)
                         stop_motors()
                     
                     elif 40 < cx < 120:
                         print("Straight, on track")
-                        move_forward()  # Adjust speed to 80%
+                        move_forward(speed)  # Adjust speed to 80%
                         time.sleep(2)
                         stop_motors()
                         time.sleep(1)
