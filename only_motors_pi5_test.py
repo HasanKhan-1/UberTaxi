@@ -4,14 +4,14 @@ import numpy as np
 import time
 
 # Motor control pins
-in1 = 26
-in2 = 16
-in3 = 6
-in4 = 5
+in1 = 6
+in2 = 5
+in3 = 25
+in4 = 24
 
 # PWM speed control pins
-ena_top = 25   # Forward speed control
-ena_bottom = 24  # Forward speed control
+ena_top = 26   # Forward speed control
+ena_bottom = 16  # Forward speed control
 enb_top = 23  # Backward speed control
 enb_bottom = 22  # Backward speed control
 
