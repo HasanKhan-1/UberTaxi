@@ -118,6 +118,7 @@ if __name__ == "__main__":
                 print("I don't see the line")
                 stop_motors()
 
+            cv2.drawContours(frame, c, -1, (0,255,0), 1)
             cv2.imshow("Mask", mask)
             cv2.imshow("Frame", frame)
             cv2.waitKey(1)
