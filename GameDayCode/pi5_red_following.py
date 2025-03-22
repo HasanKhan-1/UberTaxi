@@ -215,7 +215,7 @@ if __name__ == "__main__":
             mask = cv2.inRange(frame, low_b, high_b)
             contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             
-            if contours:
+            if len(contours) > 0:
                 c = max(contours, key=cv2.contourArea)
                 M = cv2.moments(c)
                 cv2.drawContours(frame, [c], -1, (0, 255, 0), 1)
@@ -226,12 +226,13 @@ if __name__ == "__main__":
                     print(f"CX: {cx}, CY: {cy}")
 
                     correction = pid(cx)  
-
-                    if 40 < cx < 120:
+                    # move_forward(0.5, correction)  # Move with PID correction
+                    if cx < 120 and cx > 40:
+                        print("Straight, on track")
                         move_forward(0.5, correction)  # Move with PID correction
                         time.sleep(0.1)  # Small delay for stability
-                    elif cx >= 160: 
-                        move_left(0.5, correction)  # Move left by slowing down left motor and speeding up right motor
+                    # elif cx >= 160: 
+                    #     move_left(0.5, correction)  # Move left by slowing down left motor and speeding up right motor
                 
                 else:
                     stop_motors()
