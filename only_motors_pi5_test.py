@@ -42,8 +42,8 @@ def move_forward(speed):
     motor_in2.off()
     motor_in3.on()
     motor_in4.off()
-    pwm_ena_top.value = speed / 100
-    pwm_ena_bottom.value = speed / 100
+    pwm_ena_top.value = speed 
+    pwm_ena_bottom.value = speed 
 
 def move_spin(speed):
     motor_in1.off()
@@ -62,6 +62,4 @@ def move_backwards(speed):
     pwm_enb_bottom.value = speed / 100
 
 if __name__ == "__main__":
-        stop_motors()
-        time.sleep(5)
-        move_forward(50)  # Move forward with 100% speed
+        move_forward(1)  # Move forward with 100% speed
