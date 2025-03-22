@@ -3,7 +3,7 @@ from time import sleep
 import cv2
 import numpy as np
 import time
-from simple_pid import PID  # Import the PID controller
+from simple_pid import PID  
 
 # Motor Pins
 IN1 = DigitalOutputDevice(6)
@@ -89,6 +89,8 @@ if __name__ == "__main__":
             if contours:
                 c = max(contours, key=cv2.contourArea)
                 M = cv2.moments(c)
+                cv2.drawContours(frame, c, -1, (0,255,0), 1)
+
                 if M["m00"] != 0:
                     cx = int(M['m10'] / M['m00'])
                     cy = int(M['m01'] / M['m00'])
@@ -107,7 +109,7 @@ if __name__ == "__main__":
                     
                     elif 40 < cx < 120:
                         print("Straight, on track")
-                        move_forward(8)  
+                        move_forward(0.8)  
                         time.sleep(2)
                         stop_motors()
                         time.sleep(1)
@@ -117,7 +119,6 @@ if __name__ == "__main__":
                 print("I don't see the line")
                 stop_motors()
 
-            cv2.drawContours(frame, c, -1, (0,255,0), 1)
             cv2.imshow("Mask", mask)
             cv2.imshow("Frame", frame)
             cv2.waitKey(1)
