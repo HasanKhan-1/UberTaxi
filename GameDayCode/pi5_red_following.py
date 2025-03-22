@@ -3,7 +3,7 @@ from time import sleep
 import cv2
 import numpy as np
 import time
-from pid_controller import PID  # Import the PID controller
+from simple_pid import PID  # Import the PID controller
 
 # Motor Pins
 IN1 = DigitalOutputDevice(6)
@@ -23,8 +23,7 @@ ENAb.value = 0.5  # 50% speed
 ENBb.value = 0.5
 
 # Initialize PID controller
-pid = PID(Kp=0.1, Ki=0.01, Kd=0.05)
-setpoint = 80  # Desired position (center of the frame)
+pid = PID(0.1, 0.01, 0.05, setpoint=80)  # Desired position (center of the frame)
 
 def move_forward(speed):
     """Move both motors forward with a given speed."""
@@ -96,7 +95,7 @@ if __name__ == "__main__":
                     print(f"CX: {cx}, CY: {cy}")
 
                     # Calculate PID output
-                    pid_output = pid.compute(setpoint, cx)
+                    pid_output = pid(cx)
                     speed = 0.5 + pid_output  # Adjust base speed with PID output
                     speed = max(0, min(1, speed))  # Ensure speed is within [0, 1]
 
