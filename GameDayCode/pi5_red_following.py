@@ -203,7 +203,9 @@ if __name__ == "__main__":
     try:
         stop_motors()
         cap = cv2.VideoCapture(0)  # Initialize camera
-        
+        cap.set(3, 160)
+        cap.set(4, 120)
+
         while True:
             ret, frame = cap.read()
             if not ret:
