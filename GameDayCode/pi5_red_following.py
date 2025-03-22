@@ -148,7 +148,7 @@ ENBb = PWMOutputDevice(23)  # Speed control (PWM)
 
 # Initialize PID controller
 pid = PID(0.1, 0.01, 0.05, setpoint=80)  # Setpoint is center of frame (adjust if needed)
-pid.output_limits = (-0.5, 0.5)  # Ensure PID doesn't overcorrect
+pid.output_limits = (-0.1, 0.1)  # Ensure PID doesn't overcorrect
 
 def move_forward(base_speed, correction):
     """Move both motors forward with PID correction applied."""
@@ -160,10 +160,13 @@ def move_forward(base_speed, correction):
     
     left_speed = base_speed - correction
     right_speed = base_speed + correction
-    
+
+    # left motor    
     ENA.value = max(0, min(1, left_speed))
-    ENB.value = max(0, min(1, right_speed))
     ENAb.value = max(0, min(1, left_speed))
+
+    # right motor
+    ENB.value = max(0, min(1, right_speed))
     ENBb.value = max(0, min(1, right_speed))
 
 def stop_motors():
