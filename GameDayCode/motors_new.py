@@ -3,7 +3,6 @@ from time import sleep
 import cv2
 import numpy as np
 import time
-from pid_controller import PID  # Import the PID controller
 
 # Motor Pins
 IN1 = DigitalOutputDevice(6)
@@ -23,7 +22,6 @@ ENAb.value = 0.5  # 50% speed
 ENBb.value = 0.5
 
 # Initialize PID controller
-pid = PID(Kp=0.1, Ki=0.01, Kd=0.05)
 setpoint = 80  # Desired position (center of the frame)
 
 def move_forward(speed):
@@ -71,3 +69,11 @@ def move_spin(speed):
     ENB.value = speed
     ENAb.value = speed
     ENBb.value = speed
+
+if __name__ == "__main__":
+    try:
+        move_forward(1)
+        time.sleep(5)
+    except KeyboardInterrupt:
+        stop_motors()
+        print("Exiting...")
