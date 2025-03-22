@@ -1,12 +1,16 @@
 from gpiozero import AngularServo
-from gpiozero.pins.pigpio import PiGPIOFactory
+from time import sleep
 
-factory = PiGPIOFactory()
-servo = AngularServo(
-    26,  # GPIO26
-    min_pulse_width=0.0005,  # 0.5ms pulse for 0°
-    max_pulse_width=0.0024,  # 2.4ms pulse for 180°
-    pin_factory=factory
-)
+# Create an AngularServo object
+servo = AngularServo(26, min_pulse_width=0.5/1000, max_pulse_width=2.4/1000)
 
-servo.angle = 90  # Set to 90°
+try:
+    while True:
+        servo.angle = -90  # Move to -90 degrees
+        sleep(1)
+        servo.angle = 0    # Move to 0 degrees (center)
+        sleep(1)
+        servo.angle = 90   # Move to 90 degrees
+        sleep(1)
+except KeyboardInterrupt:
+    servo.close()
