@@ -7,7 +7,6 @@ cap = cv2.VideoCapture(0)
 cap.set(3, 160)
 cap.set(4, 120)
 
-
 in1 = 6
 in2 = 5
 in3 = 22
