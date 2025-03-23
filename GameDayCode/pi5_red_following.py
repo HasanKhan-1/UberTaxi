@@ -153,22 +153,22 @@ if __name__ == "__main__":
                 print("I don't see the line")
                 stop_motors()
 
-        elif len(blue_contours) > 0:
-            for cnt in blue_contours:
-                x, y, w, h = cv2.boundingRect(cnt)
-                aspect_ratio = w / float(h)
+            elif len(blue_contours) > 0:
+                for cnt in blue_contours:
+                    x, y, w, h = cv2.boundingRect(cnt)
+                    aspect_ratio = w / float(h)
 
-                if aspect_ratio > 2.5:  # Checks if it's a wide horizontal shape
-                    print("Detected a horizontal blue line! Stopping.")
-                    stop_motors()
-                    move_servo()
-                    time.sleep(1)
+                    if aspect_ratio > 2.5:  # Checks if it's a wide horizontal shape
+                        print("Detected a horizontal blue line! Stopping.")
+                        stop_motors()
+                        move_servo()
+                        time.sleep(1)
 
-            # Show debug frames
-            cv2.imshow("Mask", mask)
-            cv2.imshow("Blue Mask", blue_mask)
-            cv2.imshow("Frame", frame)
-            cv2.waitKey(1)
+                # Show debug frames
+                cv2.imshow("Mask", mask)
+                cv2.imshow("Blue Mask", blue_mask)
+                cv2.imshow("Frame", frame)
+                cv2.waitKey(1)
 
     except KeyboardInterrupt:
         pass
