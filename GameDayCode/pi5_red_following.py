@@ -89,17 +89,6 @@ def stop_motors():
     ENAb.value = 0
     ENBb.value = 0
 
-servo = AngularServo(16, min_angle=-90, max_angle=90)
-
-def move_servo():
-    print("moving servo")
-    servo.angle = 0
-    sleep(2)
-    servo.angle = 45
-    sleep(2)
-    servo.angle = 90
-    sleep(2)
-    print("Lego man is in garage")
 
 if __name__ == "__main__":
     try:
@@ -124,6 +113,11 @@ if __name__ == "__main__":
             blue_mask = cv2.inRange(frame, low_blue, high_blue)
             blue_contours, _ = cv2.findContours(blue_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
+            cv2.imshow("Mask", mask)
+            cv2.imshow("Blue Mask", blue_mask)
+            cv2.imshow("Frame", frame)
+            cv2.waitKey(1)
+
             if len(contours) > 0:
                 c = max(contours, key=cv2.contourArea)
                 M = cv2.moments(c)
@@ -147,28 +141,19 @@ if __name__ == "__main__":
                         print("Turn Right")
                         move_right(0.5, correction)  # Move left by slowing down left motor and speeding up right motor
 
-                else:
-                    stop_motors()
-            else:
-                print("I don't see the line")
-                stop_motors()
-
             elif len(blue_contours) > 0:
-                for cnt in blue_contours:
-                    x, y, w, h = cv2.boundingRect(cnt)
-                    aspect_ratio = w / float(h)
+                servo = AngularServo(16, min_angle=0, max_angle=180)
 
-                    if aspect_ratio > 2.5:  # Checks if it's a wide horizontal shape
-                        print("Detected a horizontal blue line! Stopping.")
-                        stop_motors()
-                        move_servo()
-                        time.sleep(1)
 
-                # Show debug frames
-                cv2.imshow("Mask", mask)
-                cv2.imshow("Blue Mask", blue_mask)
-                cv2.imshow("Frame", frame)
-                cv2.waitKey(1)
+                print("Detected blue.Stopping.")
+                stop_motors()
+                print("moving servo")
+                servo.angle = 30
+                sleep(1)
+                print("Lego man is in garage")
+
+            else:
+                    print("I don't see the line")
 
     except KeyboardInterrupt:
         pass
