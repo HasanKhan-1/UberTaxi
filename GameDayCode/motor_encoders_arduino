@@ -1,0 +1,26 @@
+volatile int encoderPos = 0;
+int encoderPinA = 3; // INT0
+int encoderPinB = 2; // INT1
+
+void setup() {
+  pinMode(encoderPinA, INPUT);
+  pinMode(encoderPinB, INPUT);
+
+  attachInterrupt(digitalPinToInterrupt(encoderPinA), handleEncoderA, CHANGE);
+  Serial.begin(9600);
+}
+
+void loop() {
+  Serial.print("Encoder Position: ");
+  Serial.println(encoderPos);
+  delay(100);
+}
+
+void handleEncoderA() {
+  // Read B to determine direction
+  if (digitalRead(encoderPinA) == digitalRead(encoderPinB)) {
+    encoderPos++;
+  } else {
+    encoderPos--;
+  }
+}
