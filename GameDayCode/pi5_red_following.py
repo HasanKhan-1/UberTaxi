@@ -20,7 +20,8 @@ ENBb = PWMOutputDevice(23)  # Speed control (PWM)
 pid = PID(0.1, 0.01, 0.05, setpoint=80)  # Setpoint is center of frame (adjust if needed)
 pid.output_limits = (-0.1, 0.1)  # Ensure PID doesn't overcorrect
 
-servo = AngularServo(16, min_angle=0, max_angle=180) 
+servo = AngularServo(16, min_angle=0, max_angle=180, initial_angle=0) 
+servo_moved = False  # Track if the servo has already moved
 
 def move_forward(base_speed, correction):
     """Move both motors forward with PID correction applied."""
@@ -147,14 +148,17 @@ if __name__ == "__main__":
             elif len(blue_contours) > 0 and not servo_moved:  # Move only once
                 print("Detected blue. Stopping.")
                 stop_motors()
-                print("Moving servo")
-                servo.angle = 30  # Move to 30 degrees
-                sleep(1)
+                
+                if servo.angle != 30:  # Only move if it's not already at 30°
+                    print("Moving servo")
+                    servo.angle = 30  
+                    sleep(1)
+
                 print("Lego man is in garage")
                 servo_moved = True  # Mark that the servo has moved
 
             else:
-                    print("I don't see the line")
+                print("I don't see the line")
 
     except KeyboardInterrupt:
         pass
