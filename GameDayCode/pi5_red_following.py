@@ -1,4 +1,4 @@
-from gpiozero import PWMOutputDevice, DigitalOutputDevice
+from gpiozero import PWMOutputDevice, DigitalOutputDevice, Servo, AngularServo
 from time import sleep
 import cv2
 import numpy as np
@@ -89,6 +89,18 @@ def stop_motors():
     ENAb.value = 0
     ENBb.value = 0
 
+servo = AngularServo(16, min_angle=-90, max_angle=90)
+
+def move_servo():
+    print("moving servo")
+    servo.angle = 0
+    sleep(2)
+    servo.angle = 45
+    sleep(2)
+    servo.angle = 90
+    sleep(2)
+    print("Lego man is in garage")
+
 if __name__ == "__main__":
     try:
         stop_motors()
@@ -106,6 +118,12 @@ if __name__ == "__main__":
             mask = cv2.inRange(frame, low_b, high_b)
             contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
             
+
+            low_blue = np.array([102, 0, 0], dtype=np.uint8)  # Blue low threshold
+            high_blue = np.array([255, 102, 102], dtype=np.uint8)  # Blue high threshold
+            blue_mask = cv2.inRange(frame, low_blue, high_blue)
+            blue_contours, _ = cv2.findContours(blue_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
             if len(contours) > 0:
                 c = max(contours, key=cv2.contourArea)
                 M = cv2.moments(c)
@@ -135,8 +153,20 @@ if __name__ == "__main__":
                 print("I don't see the line")
                 stop_motors()
 
+        elif len(blue_contours) > 0:
+            for cnt in blue_contours:
+                x, y, w, h = cv2.boundingRect(cnt)
+                aspect_ratio = w / float(h)
+
+                if aspect_ratio > 2.5:  # Checks if it's a wide horizontal shape
+                    print("Detected a horizontal blue line! Stopping.")
+                    stop_motors()
+                    move_servo()
+                    time.sleep(1)
+
             # Show debug frames
             cv2.imshow("Mask", mask)
+            cv2.imshow("Blue Mask", blue_mask)
             cv2.imshow("Frame", frame)
             cv2.waitKey(1)
 
