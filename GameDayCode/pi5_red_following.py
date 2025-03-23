@@ -98,6 +98,7 @@ if __name__ == "__main__":
         cap = cv2.VideoCapture(0)  # Initialize camera
         cap.set(3, 160)
         cap.set(4, 120)
+        servo_moved = False  # Track if the servo has already moved
 
         while True:
             ret, frame = cap.read()
