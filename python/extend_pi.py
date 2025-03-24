@@ -13,8 +13,8 @@ def shift_out(bit_pattern):
         data_pin.value = int(bit)  # Send each bit (1 or 0)
         clock_pin.on()  # Pulse clock to shift data
         clock_pin.off()
-    latch_pin.on()  # Update outputs
+    latch_pin.on()  # Apply output state
 
-# Example: Turn on LED connected to Q0 (First output of 74HC595)
-ledpattern = "00000001"  # Binary pattern for turning ON the first LED
+# Turn ON only Q2 (LED at Q2)
+ledpattern = "00000100"  # Q2 = 1, all others = 0
 shift_out(ledpattern)
