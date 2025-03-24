@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include <Wire.h>
+#include <PinChangeInterrupt.h>  // Include the library
 
 // Motor control pins
 const int IN1 = 8;  // Input 1 for Left Motor
@@ -8,6 +9,16 @@ const int ENA = 9;  // Enable pin for Motor A (PWM capable)
 const int IN3 = 6;  // Input 1 for Right Motor
 const int IN4 = 5;  // Input 2 for Right Motor
 const int ENB = 4;  // Enable pin for Motor B (PWM capable)
+
+// Encoder 1 (Left) - INT1
+volatile int encoderPos1 = 0;
+const int encoder1PinA = 3;
+const int encoder1PinB = 2;
+
+// Encoder 2 (Right) - PCI
+volatile int encoderPos2 = 0;
+const int encoder2PinA = 4;
+const int encoder2PinB = 5;
 
 // Forward declaration of the handleMotorCommand function
 void handleMotorCommand(int command);
@@ -42,12 +53,45 @@ void setup() {
     digitalWrite(IN3, LOW);
     digitalWrite(IN4, LOW);
     analogWrite(ENB, 0);
+
+    // Encoder 1
+    pinMode(encoder1PinA, INPUT);
+    pinMode(encoder1PinB, INPUT);
+    attachInterrupt(digitalPinToInterrupt(encoder1PinA), handleEncoder1A, CHANGE);
+
+    // Encoder 2
+    pinMode(encoder2PinA, INPUT);
+    pinMode(encoder2PinB, INPUT);
+    attachPinChangeInterrupt(digitalPinToPinChangeInterrupt(encoder2PinA), handleEncoder2A, CHANGE);
 }
 
 void loop() {
-    // Main loop does nothing, motor control is handled in receiveEvent
+    Serial.print("Encoder 1 (Left): ");
+    Serial.print(encoderPos1 * (210.48666 / (12 * 34 * 2.36)));
+    Serial.print(" | Encoder 2 (Right): ");
+    Serial.println(encoderPos2 * (210.48666 / (12 * 34 * 2.36)));
+    delay(100);
 }
 
+// Interrupt for Encoder 1
+void handleEncoder1A() {
+    if (digitalRead(encoder1PinA) == digitalRead(encoder1PinB)) {
+        encoderPos1++;
+    } else {
+        encoderPos1--;
+    }
+}
+
+// Pin change interrupt for Encoder 2
+void handleEncoder2A() {
+    if (digitalRead(encoder2PinA) == digitalRead(encoder2PinB)) {
+        encoderPos2++;
+    } else {
+        encoderPos2--;
+    }
+}
+
+// Function to handle motor commands
 void handleMotorCommand(int command) {
     switch (command) {
         case 0: // Stop
@@ -57,7 +101,7 @@ void handleMotorCommand(int command) {
             digitalWrite(IN1, LOW);
             digitalWrite(IN2, LOW);
             digitalWrite(IN3, LOW);
-            digitalWrite(IN4, LOW); 
+            digitalWrite(IN4, LOW);
             break;
 
         case 1: // Move forward (A&B)
@@ -69,6 +113,7 @@ void handleMotorCommand(int command) {
             analogWrite(ENA, 200); // Set speed to 200 (0-255)
             analogWrite(ENB, 200); // Set speed to 200 (0-255)
             break;
+
         case 2: // Turn left (A stop, B forward)
             Serial.println("Command: Turn left");
             digitalWrite(IN1, LOW);
@@ -78,6 +123,7 @@ void handleMotorCommand(int command) {
             analogWrite(ENA, 0); // Stop left motor
             analogWrite(ENB, 200); // Set speed to 200 (0-255)
             break;
+
         case 3: // Turn right (B stop, A forward)
             Serial.println("Command: Turn right");
             digitalWrite(IN1, HIGH);
