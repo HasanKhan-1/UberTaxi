@@ -70,19 +70,19 @@
 #     #     stop_motors()
 
 
-from gpiozero import LED
+from gpiozero import DigitalOutputDevice, PWMOutputDevice
 from time import sleep
 
 # List of all usable GPIO pins (excluding power, ground, and reserved pins)
 gpio_pins = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 
              16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
 
-# Create LED objects for each pin
-leds = [LED(pin) for pin in gpio_pins]
+# Create output objects for each pin
+outputs = [DigitalOutputDevice(pin) for pin in gpio_pins]
 
 # Turn ON all GPIO pins
-for led in leds:
-    led.on()
+for output in outputs:
+    output.on()
 
 print("All GPIO pins are ON!")
 
@@ -92,5 +92,5 @@ try:
         sleep(1)  # Keep the program running
 except KeyboardInterrupt:
     print("Turning off all GPIO pins...")
-    for led in leds:
-        led.off()
+    for output in outputs:
+        output.off()
