@@ -20,7 +20,7 @@ ENBb = PWMOutputDevice(24)  # Speed control (PWM)
 
 # Initialize PID controller
 pid = PID(0.1, 0.05, 0.05)  
-pid.output_limits = (0.0, 1.0)  # Ensure PID doesn't overcorrect
+pid.output_limits = (-0.1, 0.1)  # Ensure PID doesn't overcorrect
 
 servo = AngularServo(16, min_angle=0, max_angle=180, initial_angle=None) 
 servo_moved = False  # Track if the servo has already moved
@@ -30,11 +30,11 @@ def move_forward(base_speed, correction):
     print(f"Moving forward")
     IN1.off()
     IN2.on()
-    IN3.off()
-    IN4.on()
+    IN3.on()
+    IN4.off()
     
-    left_speed = base_speed - correction
-    right_speed = base_speed + correction
+    left_speed = base_speed 
+    right_speed = base_speed 
 
     # left motor    
     ENA.value = max(0, min(1, left_speed))
@@ -48,8 +48,8 @@ def move_left(base_speed, correction):
     print(f"Moving left, Correction: {correction}")
     IN1.off()
     IN2.on()
-    IN3.off()
-    IN4.on()
+    IN3.on()
+    IN4.off()
 
     # Slow down left motor, speed up right motor
     left_speed = base_speed - 0.05  # Decrease left motor speed (adjust as needed)
@@ -67,8 +67,8 @@ def move_right(base_speed, correction):
     print(f"Moving left, Correction: {correction}")
     IN1.off()
     IN2.on()
-    IN3.off()
-    IN4.on()
+    IN3.on()
+    IN4.off()
     
     # Slow down left motor, speed up right motor
     left_speed = base_speed + 0.08  # Increase left motor speed (adjust as needed)
@@ -86,8 +86,8 @@ def move_backwards(base_speed, correction):
     print(f"Moving forward")
     IN1.on()
     IN2.off()
-    IN3.on()
-    IN4.off()
+    IN3.off()
+    IN4.on()
     
     left_speed = base_speed - correction
     right_speed = base_speed + correction
@@ -156,7 +156,7 @@ if __name__ == "__main__":
                     # move_forward(0.5)  # Move with PID correction
                     if cx < 120 and cx > 40:
                         print("Straight, on track")
-                        move_forward(0.1, correction)  # Move with PID correction
+                        move_forward(0.15, correction)  # Move with PID correction
                         print(f"Correction: {correction}")
                     elif cx >= 160: 
                         move_left(0.1, correction)  # Move left by slowing down left motor and speeding up right motor

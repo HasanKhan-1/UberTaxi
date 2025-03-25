@@ -25,8 +25,8 @@ def move_forward():
     print("Moving forward")
     IN1.off()
     IN2.on()
-    IN3.off()
-    IN4.on()
+    IN3.on()
+    IN4.off()
     ENA.value = 1
     ENB.value = 1
     ENAb.value = 1

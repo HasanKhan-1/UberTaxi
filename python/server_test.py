@@ -1,34 +1,40 @@
 
-import cv2
+# import cv2
 
 
 
-cap = cv2.VideoCapture(0)  # Initialize camera
-cap.set(3, 160)
-cap.set(4, 120)
+# cap = cv2.VideoCapture(0)  # Initialize camera
+# cap.set(3, 160)
+# cap.set(4, 120)
 
-while True:
-    ret, frame = cap.read()
-    if not ret:
-        print("No frame captured")
-    cv2.imshow("Frame", frame)
-    cv2.waitKey(1)
+# while True:
+#     ret, frame = cap.read()
+#     if not ret:
+#         print("No frame captured")
+#     cv2.imshow("Frame", frame)
+#     cv2.waitKey(1)
 
 
 # from gpiozero import Servo, AngularServo
 # from time import sleep
 
-# # servo = Servo(16)
-# servo = AngularServo(16, min_angle=-90, max_angle=90)
+# servo = Servo(16)
+# servo = AngularServo(16, min_angle=-180, max_angle=180)
 
-# while True:
-#     servo.angle = 0
-#     sleep(2)
-#     servo.angle = 45
-#     sleep(2)
-#     servo.angle = 90
-#     sleep(2)
+# print("Moving servo")
+# servo.angle = 0.001
+# sleep(10)
+# # servo.detach()
 
+# servo = Servo(16, min_pulse_width=0.0005, max_pulse_width=0.0025)
+
+# try: 
+#     servo.value = 0
+#     sleep(1)
+#     servo.value = 0.1
+#     sleep(1)
+# finally: 
+#     servo.value = None
 
 # from gpiozero import PWMOutputDevice, DigitalOutputDevice
 # from time import sleep
