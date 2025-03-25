@@ -25,13 +25,13 @@ pid.output_limits = (-0.1, 0.1)  # Ensure PID doesn't overcorrect
 servo = AngularServo(16, min_angle=0, max_angle=180, initial_angle=None) 
 servo_moved = False  # Track if the servo has already moved
 
-def move_forward(base_speed, correction):
+def move_forward(base_speed):
     """Move both motors forward with PID correction applied."""
     print(f"Moving forward")
-    IN1.on()
-    IN2.off()
-    IN3.on()
-    IN4.off()
+    IN1.off()
+    IN2.on()
+    IN3.off()
+    IN4.on()
     
     ENA.value = base_speed
     ENAb.value = base_speed
