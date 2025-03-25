@@ -1,8 +1,6 @@
 
 # import cv2
 
-
-
 # cap = cv2.VideoCapture(0)  # Initialize camera
 # cap.set(3, 160)
 # cap.set(4, 120)
@@ -15,26 +13,24 @@
 #     cv2.waitKey(1)
 
 
-# from gpiozero import Servo, AngularServo
-# from time import sleep
 
-# servo = Servo(16)
-# servo = AngularServo(16, min_angle=-180, max_angle=180)
+from gpiozero import Servo
+from time import sleep
 
-# print("Moving servo")
-# servo.angle = 0.001
-# sleep(10)
-# # servo.detach()
+# Use GPIO16 (BCM mode) and adjust pulse width for microservo compatibility
+servo = Servo(16, min_pulse_width=0.5/1000, max_pulse_width=2.5/1000)
 
-# servo = Servo(16, min_pulse_width=0.0005, max_pulse_width=0.0025)
+while True:
+    # Move to ~50 degrees (around 0.3 value in gpiozero)
+    servo.value = 0.3  
+    print("Servo moved to 50 degrees")
+    sleep(1)
 
-# try: 
-#     servo.value = 0
-#     sleep(1)
-#     servo.value = 0.1
-#     sleep(1)
-# finally: 
-#     servo.value = None
+    # Move back to 0 degrees (center is 0)
+    servo.value = 0.0  
+    print("Servo moved to 0 degrees")
+    sleep(1)
+
 
 # from gpiozero import PWMOutputDevice, DigitalOutputDevice
 # from time import sleep
