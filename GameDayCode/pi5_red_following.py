@@ -40,7 +40,6 @@ def move_forward(base_speed, correction):
     ENA.value = max(0, min(1, left_speed))
     ENAb.value = max(0, min(1, left_speed))
 
-    # right motor
     ENB.value = max(0, min(1, right_speed))
     ENBb.value = max(0, min(1, right_speed))
 
@@ -73,7 +72,7 @@ def move_right(base_speed, correction):
     
     # Slow down left motor, speed up right motor
     left_speed = base_speed + 0.08  # Increase left motor speed (adjust as needed)
-    right_speed = base_speed - 0.05  # Decrease right motor speed (adjust as needed)
+    right_speed = base_speed - 0.08  # Decrease right motor speed (adjust as needed)
 
     # Apply the speeds to the motors
     ENA.value = max(0, min(1, left_speed))
