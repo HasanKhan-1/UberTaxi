@@ -25,7 +25,7 @@ pid.output_limits = (-0.1, 0.1)  # Ensure PID doesn't overcorrect
 servo = AngularServo(16, min_angle=0, max_angle=180, initial_angle=None) 
 servo_moved = False  # Track if the servo has already moved
 
-def move_forward(base_speed):
+def move_forward(base_speed, correction):
     """Move both motors forward with PID correction applied."""
     print(f"Moving forward")
     IN1.off()
@@ -33,20 +33,24 @@ def move_forward(base_speed):
     IN3.off()
     IN4.on()
     
-    ENA.value = base_speed
-    ENAb.value = base_speed
+    left_speed = base_speed - correction
+    right_speed = base_speed + correction
+
+    # left motor    
+    ENA.value = max(0, min(1, left_speed))
+    ENAb.value = max(0, min(1, left_speed))
 
     # right motor
-    ENB.value = base_speed
-    ENBb.value = base_speed
+    ENB.value = max(0, min(1, right_speed))
+    ENBb.value = max(0, min(1, right_speed))
 
-def move_left(base_speed):
+def move_left(base_speed, correction):
     """Move robot left by slowing down left motor and speeding up right motor."""
     print(f"Moving left, Correction: {correction}")
-    IN1.on()
-    IN2.off()
-    IN3.on()
-    IN4.off()
+    IN1.off()
+    IN2.on()
+    IN3.off()
+    IN4.on()
 
     # Slow down left motor, speed up right motor
     left_speed = base_speed - 0.2  # Decrease left motor speed (adjust as needed)
@@ -62,17 +66,40 @@ def move_left(base_speed):
 def move_right(base_speed, correction):
     """Move robot left by slowing down left motor and speeding up right motor."""
     print(f"Moving left, Correction: {correction}")
+    IN1.off()
+    IN2.on()
+    IN3.off()
+    IN4.on()
+    
+    # Slow down left motor, speed up right motor
+    left_speed = base_speed + 0.2  # Increase left motor speed (adjust as needed)
+    right_speed = base_speed - 0.2  # Decrease right motor speed (adjust as needed)
+
+    # Apply the speeds to the motors
+    ENA.value = max(0, min(1, left_speed))
+    ENAb.value = max(0, min(1, left_speed))
+    ENB.value = max(0, min(1, right_speed))
+    ENBb.value = max(0, min(1, right_speed))
+
+
+def move_backwards(base_speed, correction):
+    """Move both motors forward with PID correction applied."""
+    print(f"Moving forward")
     IN1.on()
     IN2.off()
     IN3.on()
     IN4.off()
     
-    # Apply the speeds to the motors
-    ENA.value = base_speed
-    ENAb.value = base_speed
-    ENB.value = base_speed
-    ENBb.value = base_speed
+    left_speed = base_speed - correction
+    right_speed = base_speed + correction
 
+    # left motor    
+    ENA.value = max(0, min(1, left_speed))
+    ENAb.value = max(0, min(1, left_speed))
+
+    # right motor
+    ENB.value = max(0, min(1, right_speed))
+    ENBb.value = max(0, min(1, right_speed))
 
 def stop_motors():
     """Stop both motors."""
@@ -130,24 +157,23 @@ if __name__ == "__main__":
                     # move_forward(0.5)  # Move with PID correction
                     if cx < 120 and cx > 40:
                         print("Straight, on track")
-                        move_forward(1)  # Move with PID correction
-                    # elif cx >= 160: 
-                    #     move_left(0.5, correction)  # Move left by slowing down left motor and speeding up right motor
-                
-                    # elif cx <=40 :
-                    #     print("Turn Right")
-                    #     move_right(0.5, correction)  # Move left by slowing down left motor and speeding up right motor
+                        move_forward(1, correction)  # Move with PID correction
+                    elif cx >= 160: 
+                        move_left(0.5, correction)  # Move left by slowing down left motor and speeding up right motor
+                    elif cx <=40 :
+                        print("Turn Right")
+                        move_right(0.5, correction)  # Move left by slowing down left motor and speeding up right motor
 
-            elif len(blue_contours) > 0 and not servo_moved:  # Move only once
-                print("Detected blue. Stopping.")
-                stop_motors()
+            # elif len(blue_contours) > 0 and not servo_moved:  # Move only once
+            #     print("Detected blue. Stopping.")
+            #     stop_motors()
                 
-                print("Moving servo")
-                servo.angle = 30
-                sleep(1)
-                servo.detach()
-                print("Lego man is in garage")
-                servo_moved = True  # Mark that the servo has moved
+            #     print("Moving servo")
+            #     servo.angle = 30
+            #     sleep(1)
+            #     servo.detach()
+            #     print("Lego man is in garage")
+            #     servo_moved = True  # Mark that the servo has moved
 
             else:
                 stop_motors()
