@@ -19,8 +19,8 @@ ENAb = PWMOutputDevice(27)  # Speed control (PWM)
 ENBb = PWMOutputDevice(24)  # Speed control (PWM)
 
 # Initialize PID controller
-pid = PID(0.1, 0.01, 0.05, setpoint=80)  # Setpoint is center of frame (adjust if needed)
-pid.output_limits = (-0.1, 0.1)  # Ensure PID doesn't overcorrect
+pid = PID(0.1, 0.05, 0.05)  
+pid.output_limits = (0.0, 1.0)  # Ensure PID doesn't overcorrect
 
 servo = AngularServo(16, min_angle=0, max_angle=180, initial_angle=None) 
 servo_moved = False  # Track if the servo has already moved
@@ -53,8 +53,8 @@ def move_left(base_speed, correction):
     IN4.on()
 
     # Slow down left motor, speed up right motor
-    left_speed = base_speed - 0.2  # Decrease left motor speed (adjust as needed)
-    right_speed = base_speed + 0.2  # Increase right motor speed (adjust as needed)
+    left_speed = base_speed - 0.05  # Decrease left motor speed (adjust as needed)
+    right_speed = base_speed + 0.08  # Increase right motor speed (adjust as needed)
 
     # Apply the speeds to the motors
     ENA.value = max(0, min(1, left_speed))
@@ -72,8 +72,8 @@ def move_right(base_speed, correction):
     IN4.on()
     
     # Slow down left motor, speed up right motor
-    left_speed = base_speed + 0.2  # Increase left motor speed (adjust as needed)
-    right_speed = base_speed - 0.2  # Decrease right motor speed (adjust as needed)
+    left_speed = base_speed + 0.08  # Increase left motor speed (adjust as needed)
+    right_speed = base_speed - 0.05  # Decrease right motor speed (adjust as needed)
 
     # Apply the speeds to the motors
     ENA.value = max(0, min(1, left_speed))
@@ -157,13 +157,13 @@ if __name__ == "__main__":
                     # move_forward(0.5)  # Move with PID correction
                     if cx < 120 and cx > 40:
                         print("Straight, on track")
-                        move_forward(0.2, correction)  # Move with PID correction
+                        move_forward(0.1, correction)  # Move with PID correction
                         print(f"Correction: {correction}")
                     elif cx >= 160: 
-                        move_left(0.3, correction)  # Move left by slowing down left motor and speeding up right motor
+                        move_left(0.1, correction)  # Move left by slowing down left motor and speeding up right motor
                     elif cx <=40 :
                         print("Turn Right")
-                        move_right(0.3, correction)  # Move left by slowing down left motor and speeding up right motor
+                        move_right(0.1, correction)  # Move left by slowing down left motor and speeding up right motor
 
             # elif len(blue_contours) > 0 and not servo_moved:  # Move only once
             #     print("Detected blue. Stopping.")
