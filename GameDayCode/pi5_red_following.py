@@ -33,18 +33,14 @@ def move_forward(base_speed, correction):
     IN3.on()
     IN4.off()
     
-    left_speed = base_speed
-    right_speed = base_speed
-
-    # left motor    
-    ENA.value = left_speed
-    ENAb.value = left_speed
+    ENA.value = base_speed
+    ENAb.value = base_speed
 
     # right motor
-    ENB.value = right_speed
-    ENBb.value = right_speed
+    ENB.value = base_speed
+    ENBb.value = base_speed
 
-def move_left(base_speed, correction):
+def move_left(base_speed):
     """Move robot left by slowing down left motor and speeding up right motor."""
     print(f"Moving left, Correction: {correction}")
     IN1.on()
@@ -131,10 +127,10 @@ if __name__ == "__main__":
                     print(f"CX: {cx}, CY: {cy}")
 
                     correction = pid(cx)  
-                    # move_forward(0.5, correction)  # Move with PID correction
+                    # move_forward(0.5)  # Move with PID correction
                     if cx < 120 and cx > 40:
                         print("Straight, on track")
-                        move_forward(1, correction)  # Move with PID correction
+                        move_forward(1)  # Move with PID correction
                     # elif cx >= 160: 
                     #     move_left(0.5, correction)  # Move left by slowing down left motor and speeding up right motor
                 
