@@ -157,12 +157,13 @@ if __name__ == "__main__":
                     # move_forward(0.5)  # Move with PID correction
                     if cx < 120 and cx > 40:
                         print("Straight, on track")
-                        move_forward(1, correction)  # Move with PID correction
+                        move_forward(0.2, correction)  # Move with PID correction
+                        print(f"Correction: {correction}")
                     elif cx >= 160: 
-                        move_left(0.5, correction)  # Move left by slowing down left motor and speeding up right motor
+                        move_left(0.3, correction)  # Move left by slowing down left motor and speeding up right motor
                     elif cx <=40 :
                         print("Turn Right")
-                        move_right(0.5, correction)  # Move left by slowing down left motor and speeding up right motor
+                        move_right(0.3, correction)  # Move left by slowing down left motor and speeding up right motor
 
             # elif len(blue_contours) > 0 and not servo_moved:  # Move only once
             #     print("Detected blue. Stopping.")

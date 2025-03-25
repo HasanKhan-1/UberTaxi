@@ -23,10 +23,10 @@ ENBb.value = 0.5
 def move_forward():
     """Move both motors forward."""
     print("Moving forward")
-    IN1.on()
-    IN2.off()
-    IN3.on()
-    IN4.off()
+    IN1.off()
+    IN2.on()
+    IN3.off()
+    IN4.on()
     ENA.value = 1
     ENB.value = 1
     ENAb.value = 1
@@ -35,10 +35,10 @@ def move_forward():
 def move_backward():
     """Move both motors backward."""
     print("Moving backward")
-    IN1.off()
-    IN2.on()
-    IN3.off()
-    IN4.on()
+    IN1.on()
+    IN2.off()
+    IN3.on()
+    IN4.off()
     ENA.value = 0.5
     ENB.value = 0.5
     ENAb.value = 0.5
@@ -59,12 +59,12 @@ def stop_motors():
 if __name__ == "__main__":
     while True:
         move_forward()
-        sleep(2)  # Move forward for 2 seconds
-        stop_motors()
-        sleep(1)  # Stop for 1 second
-        move_backward()
-        sleep(2)  # Move backward for 2 seconds
-        stop_motors()
+        # sleep(2)  # Move forward for 2 seconds
+        # stop_motors()
+        # sleep(1)  # Stop for 1 second
+        # move_backward()
+        # sleep(2)  # Move backward for 2 seconds
+        # stop_motors()
     # except KeyboardInterrupt:
     #     pass
     # finally:
