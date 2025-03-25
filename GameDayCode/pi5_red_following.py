@@ -6,15 +6,17 @@ import time
 from simple_pid import PID  
 
 # Motor Pins
-IN1 = DigitalOutputDevice(6)
+
+IN1 = DigitalOutputDevice(14)
 IN2 = DigitalOutputDevice(5)
-IN3 = DigitalOutputDevice(25)
-IN4 = DigitalOutputDevice(24)
-ENA = PWMOutputDevice(17)  # Speed control (PWM)
-ENB = PWMOutputDevice(22)  # Speed control (PWM)
+IN3 = DigitalOutputDevice(2)
+IN4 = DigitalOutputDevice(3)
+ENA = PWMOutputDevice(4)  # Speed control (PWM)
+
+ENB = PWMOutputDevice(23)  # Speed control (PWM)
 
 ENAb = PWMOutputDevice(27)  # Speed control (PWM)
-ENBb = PWMOutputDevice(23)  # Speed control (PWM)
+ENBb = PWMOutputDevice(24)  # Speed control (PWM)
 
 # Initialize PID controller
 pid = PID(0.1, 0.01, 0.05, setpoint=80)  # Setpoint is center of frame (adjust if needed)
@@ -25,22 +27,22 @@ servo_moved = False  # Track if the servo has already moved
 
 def move_forward(base_speed, correction):
     """Move both motors forward with PID correction applied."""
-    print(f"Moving forward, Correction: {correction}")
+    print(f"Moving forward")
     IN1.on()
     IN2.off()
     IN3.on()
     IN4.off()
     
-    left_speed = base_speed - correction
-    right_speed = base_speed + correction
+    left_speed = base_speed
+    right_speed = base_speed
 
     # left motor    
-    ENA.value = max(0, min(1, left_speed))
-    ENAb.value = max(0, min(1, left_speed))
+    ENA.value = left_speed
+    ENAb.value = left_speed
 
     # right motor
-    ENB.value = max(0, min(1, right_speed))
-    ENBb.value = max(0, min(1, right_speed))
+    ENB.value = right_speed
+    ENBb.value = right_speed
 
 def move_left(base_speed, correction):
     """Move robot left by slowing down left motor and speeding up right motor."""
@@ -68,16 +70,12 @@ def move_right(base_speed, correction):
     IN2.off()
     IN3.on()
     IN4.off()
-
-    # Slow down left motor, speed up right motor
-    left_speed = base_speed + 0.2  # Increase left motor speed (adjust as needed)
-    right_speed = base_speed - 0.2  # Decrease right motor speed (adjust as needed)
-
+    
     # Apply the speeds to the motors
-    ENA.value = max(0, min(1, left_speed))
-    ENAb.value = max(0, min(1, left_speed))
-    ENB.value = max(0, min(1, right_speed))
-    ENBb.value = max(0, min(1, right_speed))
+    ENA.value = base_speed
+    ENAb.value = base_speed
+    ENB.value = base_speed
+    ENBb.value = base_speed
 
 
 def stop_motors():
@@ -136,14 +134,13 @@ if __name__ == "__main__":
                     # move_forward(0.5, correction)  # Move with PID correction
                     if cx < 120 and cx > 40:
                         print("Straight, on track")
-                        move_forward(0.5, correction)  # Move with PID correction
-                        time.sleep(0.1)  # Small delay for stability
-                    elif cx >= 160: 
-                        move_left(0.5, correction)  # Move left by slowing down left motor and speeding up right motor
+                        move_forward(1, correction)  # Move with PID correction
+                    # elif cx >= 160: 
+                    #     move_left(0.5, correction)  # Move left by slowing down left motor and speeding up right motor
                 
-                    elif cx <=40 :
-                        print("Turn Right")
-                        move_right(0.5, correction)  # Move left by slowing down left motor and speeding up right motor
+                    # elif cx <=40 :
+                    #     print("Turn Right")
+                    #     move_right(0.5, correction)  # Move left by slowing down left motor and speeding up right motor
 
             elif len(blue_contours) > 0 and not servo_moved:  # Move only once
                 print("Detected blue. Stopping.")
