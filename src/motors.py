@@ -11,8 +11,8 @@ class MotorController:
         # Motor Pins
         self.IN1 = DigitalOutputDevice(14)
         self.IN2 = DigitalOutputDevice(5)
-        self.IN3 = DigitalOutputDevice(2)
-        self.IN4 = DigitalOutputDevice(3)
+        self.IN3 = DigitalOutputDevice(3)
+        self.IN4 = DigitalOutputDevice(2)
         self.ENA = PWMOutputDevice(4)  # Speed control (PWM)
         self.ENB = PWMOutputDevice(23)  # Speed control (PWM)
         self.ENAb = PWMOutputDevice(27)  # Speed control (PWM)
