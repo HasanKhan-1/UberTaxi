@@ -27,8 +27,9 @@ class RobotController:
             # Example: Move servo to an initial position
             self.servo_controller.move_to_position(0.3, delay=1)
 
+            self.motor_controller.move_spin(0.5)
             # Start vision-based line following
-            self.vision_processor.follow_line()
+            # self.vision_processor.follow_line()
 
         except KeyboardInterrupt:
             print("Robot stopped by user.")
