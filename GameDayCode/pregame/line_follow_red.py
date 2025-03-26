@@ -1,4 +1,4 @@
-from gpiozero import PWMOutputDevice, DigitalOutputDevice, Servo, AngularServo
+from gpiozero import PWMOutputDevice, DigitalOutputDevice, AngularServo
 from time import sleep
 import cv2
 import numpy as np
@@ -21,9 +21,6 @@ ENBb = PWMOutputDevice(24)  # Speed control (PWM)
 # Initialize PID controller
 pid = PID(0.1, 0.05, 0.05)  
 pid.output_limits = (-0.1, 0.1)  # Ensure PID doesn't overcorrect
-
-servo = AngularServo(16, min_angle=0, max_angle=180, initial_angle=None) 
-servo_moved = False  # Track if the servo has already moved
 
 def move_forward(base_speed, correction):
     """Move both motors forward with PID correction applied."""
@@ -100,6 +97,21 @@ def move_backwards(base_speed, correction):
     ENB.value = max(0, min(1, right_speed))
     ENBb.value = max(0, min(1, right_speed))
 
+def move_spin(self, speed):
+    """Spin the robot in place."""
+    print("Spinning")
+    IN1.off()
+    IN2.on()
+    IN3.off()
+    IN4.on()
+
+    ENA.value = max(0, min(1, speed))
+    ENAb.value = max(0, min(1, speed))
+
+    # right motor
+    ENB.value = max(0, min(1, speed))
+    ENBb.value = max(0, min(1, speed))
+
 def stop_motors():
     """Stop both motors."""
     print("Stopping motors")
@@ -155,25 +167,33 @@ if __name__ == "__main__":
                     correction = pid(cx)  
                     if cx < 120 and cx > 50:
                         print("Straight, on track")
-                        move_forward(0.15, correction)  # Move with PID correction
+                        move_forward(0.2, correction)  # Move with PID correction
                         print(f"Correction: {correction}")
                     elif cx >= 120: 
                         print("Turn left")
-                        move_left(0.1, correction)  # Move left by slowing down left motor and speeding up right motor
+                        move_left(0.15, correction)  # Move left by slowing down left motor and speeding up right motor
                     elif cx <=50 :
                         print("Turn Right")
-                        move_right(0.1, correction)  # Move left by slowing down left motor and speeding up right motor
+                        move_right(0.15, correction)  # Move left by slowing down left motor and speeding up right motor
 
-            # elif len(blue_contours) > 0 and not servo_moved:  # Move only once
-            #     print("Detected blue. Stopping.")
-            #     stop_motors()
+            elif len(blue_contours) > 0 and not servo_moved:  
+                servo = AngularServo(16, min_angle=0, max_angle=180, min_pulse_Width = 0.5/1000, max_pulse_width=2.5/1000) 
+                servo_moved = False  
+
+                print("Detected blue. Stopping.")
+                stop_motors()
+                sleep(3)
                 
-            #     print("Moving servo")
-            #     servo.angle = 30
-            #     sleep(1)
-            #     servo.detach()
-            #     print("Lego man is in garage")
-            #     servo_moved = True  # Mark that the servo has moved
+                print("Moving servo")
+                servo.angle = 30
+                sleep(1)
+                
+                print("Lego man is in garage")
+                servo_moved = True  
+
+                print("Spinning")
+                move_spin(1.5)
+                sleep(1)
 
             else:
                 stop_motors()
