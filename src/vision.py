@@ -2,13 +2,13 @@ import cv2
 import numpy as np
 import time
 from motors import MotorController
-from pid_controller import PID
+from simple_pid import PID
 
 class VisionProcessor:
-    def __init__(self, motor_controller, pid_controller, setpoint=80):
+    def __init__(self, motor_controller, simple_pid, setpoint=80):
         """Initialize the vision processor with motor and PID controllers."""
         self.motor_controller = motor_controller
-        self.pid = pid_controller
+        self.pid = simple_pid
         self.setpoint = setpoint
         self.cap = cv2.VideoCapture(0)  # Initialize camera
         self.cap.set(3, 160)  # Set frame width
