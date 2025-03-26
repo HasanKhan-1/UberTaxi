@@ -26,8 +26,6 @@ pid.output_limits = (-0.1, 0.1)  # Ensure PID doesn't overcorrect
 encoder1 = RotaryEncoder(a=20, b=21, max_steps=0)  
 encoder2 = RotaryEncoder(a=10, b=9, max_steps=0)  
 
-TARGET_STEPS = 600
-# Conversion factor
 CONVERSION_FACTOR = 210.48666 / (12 * 34 * 2.36)
 
 
@@ -114,12 +112,26 @@ def move_spin(speed):
     IN3.off()
     IN4.on()
 
-    ENA.value = max(0, min(1, speed))
-    ENAb.value = max(0, min(1, speed))
+    ENA.value = speed
+    ENAb.value = speed
 
     # right motor
-    ENB.value = max(0, min(1, speed))
-    ENBb.value = max(0, min(1, speed))
+    ENB.value = speed
+    ENBb.value = speed
+
+def spin_180_degrees():
+    encoder1.steps = 0
+    encoder2.steps = 0
+    TARGET_STEPS = 600
+    
+    while abs(encoder1.steps) < TARGET_STEPS or abs(encoder2.steps) < TARGET_STEPS:
+        move_spin(0.15)
+        left_converted = encoder1.steps * CONVERSION_FACTOR
+        right_converted = encoder2.steps * CONVERSION_FACTOR
+        sleep(0.1)
+    
+    stop_motors()
+    print("180 spin")
 
 def stop_motors():
     """Stop both motors."""
@@ -201,17 +213,8 @@ if __name__ == "__main__":
                 servo_moved = True  
                 sleep(1)
                 
-                move_spin(0.15)
-                left_converted = encoder1.steps * CONVERSION_FACTOR
-                right_converted = encoder2.steps * CONVERSION_FACTOR
-                 
-                if abs(encoder1.steps) >= TARGET_STEPS and abs(encoder2.steps) >= TARGET_STEPS:
-                    stop_motors()
-                    print("Target reached")
-                    sleep(1) 
-
-                print("Spinning")
-                move_forward(0.2, correction)
+                print("Starting 180 degree spin")
+                spin_180_degrees()
                 sleep(1)
 
             else:
