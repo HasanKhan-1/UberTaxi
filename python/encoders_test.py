@@ -113,10 +113,11 @@ from gpiozero import DigitalInputDevice
 from time import sleep
 
 # Check each pin state
-encoder1A = DigitalInputDevice(10)
-encoder1B = DigitalInputDevice(9)
-encoder2A = DigitalInputDevice(21)
-encoder2B = DigitalInputDevice(18)
+encoder1A = DigitalInputDevice(20)
+encoder1B = DigitalInputDevice(21)
+encoder2A = DigitalInputDevice(10)
+encoder2B = DigitalInputDevice(9)
+
 
 print("Monitoring encoder signals... Move the motors and observe changes.")
 
