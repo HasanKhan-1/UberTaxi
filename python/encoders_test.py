@@ -37,12 +37,12 @@
 # except KeyboardInterrupt:
 #     print("Program interrupted")
 
-from gpiozero import RotaryEncoder, Button
+from gpiozero import Button
 from time import sleep
 
 # Encoder 1 (Left) GPIO Pins
 encoder1PinA = 10  # GPIO Pin 17 (Physical Pin 11)
-encoder1PinB = 9  # GPIO Pin 27 (Physical Pin 13)
+encoder1PinB = 9   # GPIO Pin 27 (Physical Pin 13)
 
 # Encoder 2 (Right) GPIO Pins
 encoder2PinA = 21  # GPIO Pin 22 (Physical Pin 15)
@@ -52,22 +52,31 @@ encoder2PinB = 18  # GPIO Pin 23 (Physical Pin 16)
 encoderPos1 = 0
 encoderPos2 = 0
 
-# Create RotaryEncoder objects
-encoder1 = RotaryEncoder(encoder1PinA, encoder1PinB, wrap=False)
-encoder2 = RotaryEncoder(encoder2PinA, encoder2PinB, wrap=False)
-
-# Define the callback functions for encoders
-def handle_encoder1():
+# Define callback functions for encoders
+def handle_encoder1A():
     global encoderPos1
-    encoderPos1 = encoder1.steps
+    if encoder1B.is_pressed:  # If B is HIGH when A changes, moving one direction
+        encoderPos1 += 1
+    else:  # If B is LOW when A changes, moving the other direction
+        encoderPos1 -= 1
 
-def handle_encoder2():
+def handle_encoder2A():
     global encoderPos2
-    encoderPos2 = encoder2.steps
+    if encoder2B.is_pressed:  # If B is HIGH when A changes, moving one direction
+        encoderPos2 += 1
+    else:  # If B is LOW when A changes, moving the other direction
+        encoderPos2 -= 1
 
-# Attach the event handlers
-encoder1.when_rotated = handle_encoder1
-encoder2.when_rotated = handle_encoder2
+# Setup gpiozero Buttons with pull-ups and debouncing
+encoder1A = Button(encoder1PinA, pull_up=True, bounce_time=0.001)
+encoder1B = Button(encoder1PinB, pull_up=True, bounce_time=0.001)
+
+encoder2A = Button(encoder2PinA, pull_up=True, bounce_time=0.001)
+encoder2B = Button(encoder2PinB, pull_up=True, bounce_time=0.001)
+
+# Attach the event handlers **only to channel A**
+encoder1A.when_pressed = handle_encoder1A
+encoder2A.when_pressed = handle_encoder2A
 
 try:
     while True:
@@ -80,7 +89,3 @@ try:
 
 except KeyboardInterrupt:
     print("Program interrupted")
-
-finally:
-    # No need for explicit cleanup with gpiozero
-    pass
