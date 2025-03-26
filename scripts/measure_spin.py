@@ -54,28 +54,30 @@ def stop_motors():
     ENAb.value = 0
     ENBb.value = 0
 
-try:
-    move_spin(0.15)  
-    print_encoder_values()
+if __name__ == "__main__":
 
-    if abs(encoder1.steps) >= TARGET_STEPS and abs(encoder2.steps) >= TARGET_STEPS:
+    try:
+        move_spin(0.15)  
+        print_encoder_values()
+
+        if abs(encoder1.steps) >= TARGET_STEPS and abs(encoder2.steps) >= TARGET_STEPS:
+            stop_motors()
+            print("Target reached")
+            exit()  
+            sleep(0.15) 
+
+    except KeyboardInterrupt:
+        print("\nUser interrupted script")
+
+    finally:
         stop_motors()
-        print("Target reached")
-        exit()  
-        sleep(0.15) 
-
-except KeyboardInterrupt:
-    print("\nUser interrupted script")
-
-finally:
-    stop_motors()
-    encoder1.close()
-    encoder2.close()
-    IN1.close()
-    IN2.close()
-    IN3.close()
-    IN4.close()
-    ENA.close()
-    ENB.close()
-    ENAb.close()
-    ENBb.close()
+        encoder1.close()
+        encoder2.close()
+        IN1.close()
+        IN2.close()
+        IN3.close()
+        IN4.close()
+        ENA.close()
+        ENB.close()
+        ENAb.close()
+        ENBb.close()
