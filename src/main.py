@@ -14,7 +14,7 @@ class RobotController:
         self.pid = PID(Kp=0.1, Ki=0.01, Kd=0.05)
 
         # Initialize vision processor
-        self.vision_processor = VisionProcessor(self.motor_controller, self.pid, setpoint=80)
+        # self.vision_processor = VisionProcessor(self.motor_controller, self.pid, setpoint=80)
 
         # Initialize servo controller
         self.servo_controller = ServoController(pin=16)
@@ -28,14 +28,14 @@ class RobotController:
             self.servo_controller.move_to_position(0.3, delay=1)
 
             # Start vision-based line following
-            self.vision_processor.follow_line()
+            # self.vision_processor.follow_line()
 
         except KeyboardInterrupt:
             print("Robot stopped by user.")
         finally:
             # Stop motors and clean up resources
-            self.motor_controller.stop_motors()
-            self.vision_processor.cleanup()
+            # self.motor_controller.stop_motors()
+            # self.vision_processor.cleanup()
             print("Robot shutdown complete.")
 
 if __name__ == "__main__":

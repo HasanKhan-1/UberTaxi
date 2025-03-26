@@ -4,3 +4,7 @@
 .vscode/launch.json
 .vscode/ipch
 /myenv
+
+# Ignore Python bytecode files
+*.pyc
+__pycache__/
