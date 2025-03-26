@@ -46,7 +46,7 @@ class VisionProcessor:
                         print(f"CX: {cx}, CY: {cy}")
 
                         # Calculate PID output
-                        pid_output = self.pid.compute(self.setpoint, cx)
+                        pid_output = self.pid(cx)
                         speed = 0.5 + pid_output  # Adjust base speed with PID output
                         speed = max(0, min(1, speed))  # Ensure speed is within [0, 1]
 
