@@ -186,15 +186,15 @@ if __name__ == "__main__":
                         move_right(0.15, correction)  # Move left by slowing down left motor and speeding up right motor
 
             elif len(blue_contours) > 0 and not servo_moved:  
-                servo = AngularServo(16, min_angle=0, max_angle=180, min_pulse_width = 0.5/1000, max_pulse_width=2.5/1000) 
+                servo = AngularServo(19, min_angle=0, max_angle=180, min_pulse_width = 0.5/1000, max_pulse_width=2.5/1000) 
                 servo_moved = False  
 
                 print("Detected blue. Stopping.")
                 stop_motors()
-                sleep(1)
+                sleep(3)
                 
                 print("Moving servo")
-                servo.angle = 0
+                servo.angle = 52
                 sleep(1)
                 
                 print("Lego man is in garage")
@@ -202,14 +202,16 @@ if __name__ == "__main__":
                 sleep(1)
                 
                 move_spin(0.15)
-
+                left_converted = encoder1.steps * CONVERSION_FACTOR
+                right_converted = encoder2.steps * CONVERSION_FACTOR
+                 
                 if abs(encoder1.steps) >= TARGET_STEPS and abs(encoder2.steps) >= TARGET_STEPS:
                     stop_motors()
                     print("Target reached")
                     sleep(1) 
 
                 print("Spinning")
-                move_forward(0.2, correctoin)
+                move_forward(0.2, correction)
                 sleep(1)
 
             else:
