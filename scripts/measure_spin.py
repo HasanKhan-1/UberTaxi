@@ -2,8 +2,8 @@ from gpiozero import RotaryEncoder, PWMOutputDevice, DigitalOutputDevice
 from time import sleep
 
 # Define encoder objects
-encoder1 = RotaryEncoder(a=20, b=21, max_steps=0)  # Left Encoder
-encoder2 = RotaryEncoder(a=10, b=9, max_steps=0)  # Right Encoder
+encoder1 = RotaryEncoder(a=20, b=21, max_steps=0)  
+encoder2 = RotaryEncoder(a=10, b=9, max_steps=0)  
 
 # Define motor control pins
 IN1 = DigitalOutputDevice(14)
@@ -55,24 +55,20 @@ def stop_motors():
     ENBb.value = 0
 
 try:
-    # Start very slow spin (adjust this value as needed)
     move_spin(0.15)  
-    
-    if abs(encoder1.steps) >= TARGET_STEPS and abs(encoder2.steps) >= TARGET_STEPS:
-    stop_motors()
-    print("Target reached")
-    exit()  # Stops the script
+    print_encoder_values()
 
-    while True:
-        print_encoder_values()
-        sleep(0.1)  # Update rate for encoder readings
+    if abs(encoder1.steps) >= TARGET_STEPS and abs(encoder2.steps) >= TARGET_STEPS:
+        stop_motors()
+        print("Target reached")
+        exit()  
+        sleep(0.15) 
 
 except KeyboardInterrupt:
     print("\nUser interrupted script")
 
 finally:
     stop_motors()
-    # Cleanup resources
     encoder1.close()
     encoder2.close()
     IN1.close()
