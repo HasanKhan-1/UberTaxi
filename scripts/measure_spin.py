@@ -15,7 +15,7 @@ ENB = PWMOutputDevice(23)
 ENAb = PWMOutputDevice(27)
 ENBb = PWMOutputDevice(24)
 
-TARGET_STEPS = 1000
+TARGET_STEPS = 600
 
 # Conversion factor
 CONVERSION_FACTOR = 210.48666 / (12 * 34 * 2.36)
@@ -55,29 +55,31 @@ def stop_motors():
     ENBb.value = 0
 
 if __name__ == "__main__":
+        
+        try:
+            while True:
 
-    try:
-        move_spin(0.15)  
-        print_encoder_values()
+                move_spin(0.15)  
+                print_encoder_values()
 
-        if abs(encoder1.steps) >= TARGET_STEPS and abs(encoder2.steps) >= TARGET_STEPS:
+                if abs(encoder1.steps) >= TARGET_STEPS and abs(encoder2.steps) >= TARGET_STEPS:
+                    stop_motors()
+                    print("Target reached")
+                    exit()  
+                    sleep(0.15) 
+
+        except KeyboardInterrupt:
+            print("\nUser interrupted script")
+
+        finally:
             stop_motors()
-            print("Target reached")
-            exit()  
-            sleep(0.15) 
-
-    except KeyboardInterrupt:
-        print("\nUser interrupted script")
-
-    finally:
-        stop_motors()
-        encoder1.close()
-        encoder2.close()
-        IN1.close()
-        IN2.close()
-        IN3.close()
-        IN4.close()
-        ENA.close()
-        ENB.close()
-        ENAb.close()
-        ENBb.close()
+            encoder1.close()
+            encoder2.close()
+            IN1.close()
+            IN2.close()
+            IN3.close()
+            IN4.close()
+            ENA.close()
+            ENB.close()
+            ENAb.close()
+            ENBb.close()
