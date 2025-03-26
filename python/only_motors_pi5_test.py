@@ -88,7 +88,7 @@ ENAb = PWMOutputDevice(27)
 ENBb = PWMOutputDevice(24)
 
 # Target encoder count
-TARGET_STEPS = 121
+TARGET_STEPS = 1000
 
 def move_forward():
     """Move both motors forward."""
