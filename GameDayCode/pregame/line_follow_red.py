@@ -56,8 +56,8 @@ def move_left(base_speed, correction):
     IN4.off()
 
     # Slow down left motor, speed up right motor
-    left_speed = base_speed*0.9 - 0.05  # Decrease left motor speed (adjust as needed)
-    right_speed = base_speed + 0.08  # Increase right motor speed (adjust as needed)
+    left_speed = base_speed*0.8 - 0.1  # Decrease left motor speed (adjust as needed)
+    right_speed = base_speed + 0.1  # Increase right motor speed (adjust as needed)
 
     # Apply the speeds to the motors
     ENA.value = max(0, min(1, left_speed))
@@ -75,8 +75,8 @@ def move_right(base_speed, correction):
     IN4.off()
     
     # Slow down left motor, speed up right motor
-    left_speed = base_speed*0.8 + 0.13  # Increase left motor speed (adjust as needed)
-    right_speed = base_speed - 0.13  # Decrease right motor speed (adjust as needed)
+    left_speed = base_speed*0.8 + 0.10  # Increase left motor speed (adjust as needed)
+    right_speed = base_speed - 0.10  # Decrease right motor speed (adjust as needed)
 
     # Apply the speeds to the motors
     ENA.value = max(0, min(1, left_speed))
@@ -166,7 +166,7 @@ if __name__ == "__main__":
             
 
             low_blue = np.array([102, 0, 0], dtype=np.uint8)  # Blue low threshold
-            high_blue = np.array([255, 102, 102], dtype=np.uint8)  # Blue high threshold
+            high_blue = np.array([150 , 120, 90], dtype=np.uint8)  # Blue high threshold
             blue_mask = cv2.inRange(frame, low_blue, high_blue)
             blue_contours, _ = cv2.findContours(blue_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -198,7 +198,7 @@ if __name__ == "__main__":
                         move_right(0.15, correction)  # Move left by slowing down left motor and speeding up right motor
 
             elif len(blue_contours) > 0 and not servo_moved:  
-                servo = AngularServo(19, min_angle=0, max_angle=180, min_pulse_width = 0.5/1000, max_pulse_width=2.5/1000) 
+                servo = AngularServo(26, min_angle=0, max_angle=180, min_pulse_width = 0.5/1000, max_pulse_width=2.5/1000) 
                 servo_moved = False  
 
                 print("Detected blue. Stopping.")

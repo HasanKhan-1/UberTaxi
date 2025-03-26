@@ -1,21 +1,23 @@
-from gpiozero import Servo
+from gpiozero import AngularServo
 from time import sleep
 
 class ServoController:
-    def __init__(self, pin=19, min_pulse_width=0.5/1000, max_pulse_width=2.5/1000):
-        self.servo = Servo(pin, min_pulse_width=min_pulse_width, max_pulse_width=max_pulse_width)
+    def __init__(self, pin=26, min_angle=0, max_angle=180, min_pulse_width=0.5/1000, max_pulse_width=2.5/1000):
+        self.servo = AngularServo(pin, min_angle=0, max_angle=180, min_pulse_width=min_pulse_width, max_pulse_width=max_pulse_width)
 
     def move_to_position(self, position, delay=1):
-        self.servo.value = position
+        self.servo.angle = position
         print(f"Servo moved to position: {position}")
         sleep(delay)
 
     def run_demo(self):
         while True:
             # Move to ~50 degrees (around 0.3 value in gpiozero)
-            self.move_to_position(0.3)
+            self.move_to_position(0)
+            sleep(3)
+            print("move to 52")
             # Move back to 0 degrees (center is 0)
-            self.move_to_position(0.0)
+            self.move_to_position(52)
 
 if __name__ == "__main__":
     servo_controller = ServoController()
