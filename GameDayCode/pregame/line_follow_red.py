@@ -97,7 +97,7 @@ def move_backwards(base_speed, correction):
     ENB.value = max(0, min(1, right_speed))
     ENBb.value = max(0, min(1, right_speed))
 
-def move_spin(self, speed):
+def move_spin(speed):
     """Spin the robot in place."""
     print("Spinning")
     IN1.off()
@@ -177,7 +177,7 @@ if __name__ == "__main__":
                         move_right(0.15, correction)  # Move left by slowing down left motor and speeding up right motor
 
             elif len(blue_contours) > 0 and not servo_moved:  
-                servo = AngularServo(16, min_angle=0, max_angle=180, min_pulse_Width = 0.5/1000, max_pulse_width=2.5/1000) 
+                servo = AngularServo(16, min_angle=0, max_angle=180, min_pulse_width = 0.5/1000, max_pulse_width=2.5/1000) 
                 servo_moved = False  
 
                 print("Detected blue. Stopping.")
