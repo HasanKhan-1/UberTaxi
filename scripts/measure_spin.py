@@ -15,9 +15,14 @@ ENB = PWMOutputDevice(23)
 ENAb = PWMOutputDevice(27)
 ENBb = PWMOutputDevice(24)
 
+# Conversion factor
+CONVERSION_FACTOR = 210.48666 / (12 * 34 * 2.36)
+
 def print_encoder_values():
-    """Print the current values of both encoders."""
-    print(f"Left: {encoder1.steps} | Right: {encoder2.steps}")
+    """Print the current values of both encoders with conversion."""
+    left_converted = encoder1.steps * CONVERSION_FACTOR
+    right_converted = encoder2.steps * CONVERSION_FACTOR
+    print(f"Left: {encoder1.steps} ({left_converted:.2f}) | Right: {encoder2.steps} ({right_converted:.2f})")
 
 def move_spin(speed):
     """Spin the robot in place at specified speed (0-1)."""
@@ -48,8 +53,9 @@ def stop_motors():
     ENBb.value = 0
 
 try:
-    move_spin(0.1)  
-
+    # Start very slow spin (adjust this value as needed)
+    move_spin(0.05)  # 5% power - adjust if needed
+    
     # Main monitoring loop
     while True:
         print_encoder_values()
