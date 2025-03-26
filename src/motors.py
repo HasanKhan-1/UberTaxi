@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import time
 from gpiozero import PWMOutputDevice, DigitalOutputDevice
-from pid_controller import PID  # Import the PID controller
+from simple_pid import PID  # Import the PID controller
 
 
 class MotorController:
@@ -66,3 +66,4 @@ class MotorController:
         self.ENB.value = speed
         self.ENAb.value = speed
         self.ENBb.value = speed
+
