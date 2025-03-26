@@ -33,8 +33,8 @@ def move_forward(base_speed, correction):
     IN3.on()
     IN4.off()
     
-    right_speed = base_speed*0.9
-    left_speed = base_speed
+    left_speed = base_speed*0.7
+    right_speed = base_speed
 
     # left motor    
     ENA.value = max(0, min(1, left_speed))
@@ -52,7 +52,7 @@ def move_left(base_speed, correction):
     IN4.off()
 
     # Slow down left motor, speed up right motor
-    left_speed = base_speed - 0.05  # Decrease left motor speed (adjust as needed)
+    left_speed = base_speed*0.9 - 0.05  # Decrease left motor speed (adjust as needed)
     right_speed = base_speed + 0.08  # Increase right motor speed (adjust as needed)
 
     # Apply the speeds to the motors
@@ -71,7 +71,7 @@ def move_right(base_speed, correction):
     IN4.off()
     
     # Slow down left motor, speed up right motor
-    left_speed = base_speed + 0.13  # Increase left motor speed (adjust as needed)
+    left_speed = base_speed*0.8 + 0.13  # Increase left motor speed (adjust as needed)
     right_speed = base_speed - 0.13  # Decrease right motor speed (adjust as needed)
 
     # Apply the speeds to the motors
@@ -153,14 +153,14 @@ if __name__ == "__main__":
                     print(f"CX: {cx}, CY: {cy}")
 
                     correction = pid(cx)  
-                    # move_forward(0.5)  # Move with PID correction
-                    if cx < 120 and cx > 40:
+                    if cx < 120 and cx > 50:
                         print("Straight, on track")
                         move_forward(0.15, correction)  # Move with PID correction
                         print(f"Correction: {correction}")
-                    elif cx >= 160: 
+                    elif cx >= 120: 
+                        print("Turn left")
                         move_left(0.1, correction)  # Move left by slowing down left motor and speeding up right motor
-                    elif cx <=40 :
+                    elif cx <=50 :
                         print("Turn Right")
                         move_right(0.1, correction)  # Move left by slowing down left motor and speeding up right motor
 
