@@ -26,6 +26,10 @@ class RobotController:
             
             # Example: Move servo to an initial position
             self.servo_controller.move_to_position(0.3, delay=1)
+            self.motor_controller.move_forward(0.5)
+            time.sleep(2)
+            self.motor_controller.stop_motors()
+            time.sleep(1)
 
             # Start vision-based line following
             # self.vision_processor.follow_line()
