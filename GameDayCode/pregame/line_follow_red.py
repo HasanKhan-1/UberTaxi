@@ -1,4 +1,4 @@
-from gpiozero import PWMOutputDevice, DigitalOutputDevice, AngularServo
+from gpiozero import RotaryEncoder, PWMOutputDevice, DigitalOutputDevice, AngularServo
 from time import sleep
 import cv2
 import numpy as np
@@ -6,7 +6,6 @@ import time
 from simple_pid import PID  
 
 # Motor Pins
-
 IN1 = DigitalOutputDevice(14)
 IN2 = DigitalOutputDevice(5)
 IN3 = DigitalOutputDevice(2)
@@ -21,6 +20,16 @@ ENBb = PWMOutputDevice(24)  # Speed control (PWM)
 # Initialize PID controller
 pid = PID(0.1, 0.05, 0.05)  
 pid.output_limits = (-0.1, 0.1)  # Ensure PID doesn't overcorrect
+
+# Encoders + Encoder Definitions 
+
+encoder1 = RotaryEncoder(a=20, b=21, max_steps=0)  
+encoder2 = RotaryEncoder(a=10, b=9, max_steps=0)  
+
+TARGET_STEPS = 600
+# Conversion factor
+CONVERSION_FACTOR = 210.48666 / (12 * 34 * 2.36)
+
 
 def move_forward(base_speed, correction):
     """Move both motors forward with PID correction applied."""
@@ -182,17 +191,25 @@ if __name__ == "__main__":
 
                 print("Detected blue. Stopping.")
                 stop_motors()
-                sleep(3)
+                sleep(1)
                 
                 print("Moving servo")
-                servo.angle = 30
+                servo.angle = 0
                 sleep(1)
                 
                 print("Lego man is in garage")
                 servo_moved = True  
+                sleep(1)
+                
+                move_spin(0.15)
+
+                if abs(encoder1.steps) >= TARGET_STEPS and abs(encoder2.steps) >= TARGET_STEPS:
+                    stop_motors()
+                    print("Target reached")
+                    sleep(1) 
 
                 print("Spinning")
-                move_spin(1.5)
+                move_forward(0.2, correctoin)
                 sleep(1)
 
             else:
