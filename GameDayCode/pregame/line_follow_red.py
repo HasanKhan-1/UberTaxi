@@ -125,7 +125,7 @@ def spin_180_degrees():
     TARGET_STEPS = 600
     
     while abs(encoder1.steps) < TARGET_STEPS or abs(encoder2.steps) < TARGET_STEPS:
-        move_spin(0.15)
+        move_spin(0.25)
         left_converted = encoder1.steps * CONVERSION_FACTOR
         right_converted = encoder2.steps * CONVERSION_FACTOR
         sleep(0.1)
